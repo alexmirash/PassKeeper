@@ -1,0 +1,17 @@
+<resources>
+
+    <style name="TextInputLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="NameInputTextStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/text_size_default</item>
+        <item name="android:textAlignment">viewStart</item>
+        <item name="android:inputType">textPersonName|textNoSuggestions|textVisiblePassword</item>
+        <item name="android:imeOptions">actionDone</item>
+        <item name="android:maxLength">30</item>
+    </style>
+
+</resources>

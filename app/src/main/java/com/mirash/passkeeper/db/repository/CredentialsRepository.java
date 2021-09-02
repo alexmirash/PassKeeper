@@ -41,7 +41,7 @@ public class CredentialsRepository {
         dao.delete(credentials);
     }
 
-    public LiveData<List<Credentials>> getAllEntryLiveData() {
+    public LiveData<List<Credentials>> getAllCredentialsLiveData() {
         return dao.getAll();
     }
 
