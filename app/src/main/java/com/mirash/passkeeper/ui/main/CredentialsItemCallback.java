@@ -5,4 +5,6 @@ package com.mirash.passkeeper.ui.main;
  */
 public interface CredentialsItemCallback {
     void onLinkClick(String link);
+
+    void onEditClick(int id);
 }

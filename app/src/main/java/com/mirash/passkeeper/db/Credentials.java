@@ -12,6 +12,7 @@ import com.mirash.passkeeper.model.CredentialsModel;
 public class Credentials extends CredentialsModel {
     @PrimaryKey(autoGenerate = true) private int id;
 
+    @Override
     public int getId() {
         return id;
     }

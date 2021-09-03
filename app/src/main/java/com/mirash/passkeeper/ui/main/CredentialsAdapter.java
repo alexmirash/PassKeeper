@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mirash.passkeeper.R;
-import com.mirash.passkeeper.db.Credentials;
+import com.mirash.passkeeper.model.CredentialsItem;
 
 import java.util.List;
 
@@ -19,10 +19,10 @@ import java.util.List;
  */
 
 public class CredentialsAdapter extends RecyclerView.Adapter<CredentialsItemHolder> {
-    private List<Credentials> items;
+    private List<CredentialsItem> items;
     private final CredentialsItemCallback callback;
 
-    public CredentialsAdapter(@NonNull List<Credentials> items, CredentialsItemCallback callback) {
+    public CredentialsAdapter(@NonNull List<CredentialsItem> items, CredentialsItemCallback callback) {
         this.items = items;
         this.callback = callback;
     }
@@ -40,23 +40,39 @@ public class CredentialsAdapter extends RecyclerView.Adapter<CredentialsItemHold
 
     @Override
     public void onBindViewHolder(@NonNull CredentialsItemHolder holder, int position) {
-        Credentials item = items.get(position);
-        holder.titleView.setText(item.getTitle());
+        CredentialsItem item = items.get(position);
+        String title = item.getTitle();
+        if (TextUtils.isEmpty(title)) {
+            holder.titleView.setVisibility(View.GONE);
+        } else {
+            holder.titleView.setVisibility(View.VISIBLE);
+        }
+        holder.titleView.setText(title);
         String link = item.getLink();
-        holder.linkView.setVisibility(TextUtils.isEmpty(link) ? View.GONE : View.VISIBLE);
         if (TextUtils.isEmpty(link)) {
             holder.linkView.setVisibility(View.GONE);
-            holder.linkView.setOnClickListener(null);
-            holder.titleView.setOnClickListener(null);
+            holder.headerView.setOnClickListener(null);
         } else {
             holder.linkView.setVisibility(View.VISIBLE);
-            View.OnClickListener listener = view -> callback.onLinkClick(link);
-            holder.linkView.setOnClickListener(listener);
-            holder.titleView.setOnClickListener(listener);
+            holder.headerView.setOnClickListener(view -> callback.onLinkClick(link));
         }
         holder.linkView.setText(link);
         holder.loginView.setText(item.getLogin());
-        holder.passwordView.setText(item.getPassword());
+        String password = item.getPassword();
+        if (!item.isPasswordVisible()) {
+            StringBuilder builder = new StringBuilder();
+            for (int i = 0; i < password.length(); i++) {
+                builder.append("•");
+            }
+            password = builder.toString();
+        }
+        holder.passwordView.setText(password);
+        int id = item.getId();
+        holder.editButton.setOnClickListener(view -> callback.onEditClick(id));
+        holder.passwordVisibilityCheckBox.setOnCheckedChangeListener((compoundButton, checked) -> {
+            items.get(position).setPasswordVisible(checked);
+            notifyItemChanged(position, checked);
+        });
     }
 
     @Override
@@ -65,7 +81,7 @@ public class CredentialsAdapter extends RecyclerView.Adapter<CredentialsItemHold
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    public void setItems(List<Credentials> credentials) {
+    public void setItems(List<CredentialsItem> credentials) {
         items = credentials;
         notifyDataSetChanged();
     }

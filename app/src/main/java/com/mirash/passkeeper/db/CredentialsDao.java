@@ -24,11 +24,17 @@ public interface CredentialsDao {
     @Query("SELECT * FROM Credentials WHERE id= :id")
     LiveData<Credentials> getById(int id);
 
+    @Query("SELECT * FROM Credentials WHERE id= :id")
+    Credentials getByIdSync(int id);
+
     @Query("SELECT * FROM Credentials WHERE title= :title")
     LiveData<Credentials> getByTitle(String title);
 
     @Query("SELECT * FROM Credentials WHERE title= :title")
     Credentials getByTitleSync(String title);
+
+    @Query("DELETE FROM Credentials WHERE id = :id")
+    void deleteById(int id);
 
     @Insert
     void insertAll(List<Credentials> entries);

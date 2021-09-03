@@ -3,47 +3,57 @@ package com.mirash.passkeeper.model;
 /**
  * @author Mirash
  */
-public class CredentialsModel {
+public class CredentialsModel implements ICredentials {
     protected String title;
     protected String link;
     protected String login;
     protected String password;
     protected String details;
 
+    @Override
     public String getTitle() {
         return title;
+    }
+
+    @Override
+    public String getLink() {
+        return link;
+    }
+
+    @Override
+    public String getLogin() {
+        return login;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String getDetails() {
+        return details;
+    }
+
+    @Override
+    public int getId() {
+        return 0;
     }
 
     public void setTitle(String title) {
         this.title = title;
     }
 
-    public String getLink() {
-        return link;
-    }
-
     public void setLink(String link) {
         this.link = link;
-    }
-
-    public String getLogin() {
-        return login;
     }
 
     public void setLogin(String login) {
         this.login = login;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getDetails() {
-        return details;
     }
 
     public void setDetails(String details) {
@@ -52,7 +62,7 @@ public class CredentialsModel {
 
     @Override
     public String toString() {
-        return "CredentialsModel{" +
+        return "CredentialsItem{" +
                 "title='" + title + '\'' +
                 ", link='" + link + '\'' +
                 ", login='" + login + '\'' +

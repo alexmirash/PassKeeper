@@ -49,8 +49,17 @@ public class CredentialsRepository {
         return dao.getAllSync();
     }
 
-    public LiveData<Credentials> getEntryById(int id) {
+    public LiveData<Credentials> getCredentialsById(int id) {
         return dao.getById(id);
+    }
+
+    public Credentials getCredentialsByIdSync(int id) {
+        return dao.getByIdSync(id);
+    }
+
+
+    public void deleteCredentialsById(int id) {
+        dao.deleteById(id);
     }
 
     public LiveData<Credentials> getEntryByName(String name) {

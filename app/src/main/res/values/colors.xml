@@ -9,6 +9,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="color_primary">#1C6F84</color>
     <color name="color_primary_dark">#0b4959</color>
-    <color name="color_link">@color/color_primary</color>
+    <color name="color_accent">#43a6bf</color>
     <color name="color_list_divider">#551C6F84</color>
 </resources>
