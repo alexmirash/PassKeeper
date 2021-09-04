@@ -1,5 +1,6 @@
 package com.mirash.passkeeper.ui.main;
 
+import android.graphics.Color;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.TextView;
@@ -7,13 +8,14 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mirash.passkeeper.R;
+import com.mirash.passkeeper.drag.ItemTouchHelperViewHolder;
 
 
 /**
  * @author Mirash
  */
 
-class CredentialsItemHolder extends RecyclerView.ViewHolder {
+class CredentialsItemHolder extends RecyclerView.ViewHolder implements ItemTouchHelperViewHolder {
     final View headerView;
     final TextView titleView;
     final TextView linkView;
@@ -39,5 +41,15 @@ class CredentialsItemHolder extends RecyclerView.ViewHolder {
         pinSectionView = itemView.findViewById(R.id.item_pin_section);
         pinView = pinSectionView.findViewById(R.id.item_pin_text);
         passwordVisibilityCheckBox = itemView.findViewById(R.id.item_password_visibility_checkbox);
+    }
+
+    @Override
+    public void onItemSelected() {
+        itemView.setBackgroundColor(Color.LTGRAY);
+    }
+
+    @Override
+    public void onItemClear() {
+        itemView.setBackgroundColor(0);
     }
 }

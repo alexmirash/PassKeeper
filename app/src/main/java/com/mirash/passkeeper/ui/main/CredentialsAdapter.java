@@ -10,15 +10,17 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mirash.passkeeper.R;
+import com.mirash.passkeeper.drag.ItemTouchHelperAdapter;
 import com.mirash.passkeeper.model.CredentialsItem;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
  * @author Mirash
  */
 
-public class CredentialsAdapter extends RecyclerView.Adapter<CredentialsItemHolder> {
+public class CredentialsAdapter extends RecyclerView.Adapter<CredentialsItemHolder> implements ItemTouchHelperAdapter {
     private List<CredentialsItem> items;
     private final CredentialsItemCallback callback;
 
@@ -38,6 +40,7 @@ public class CredentialsAdapter extends RecyclerView.Adapter<CredentialsItemHold
         return R.layout.credentials_item_view;
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onBindViewHolder(@NonNull CredentialsItemHolder holder, int position) {
         CredentialsItem item = items.get(position);
@@ -92,6 +95,11 @@ public class CredentialsAdapter extends RecyclerView.Adapter<CredentialsItemHold
             items.get(position).setPasswordVisible(checked);
             notifyItemChanged(position, checked);
         });
+        //drag
+        holder.itemView.setOnLongClickListener(view -> {
+            callback.onDragStart(holder);
+            return false;
+        });
     }
 
     @Override
@@ -103,5 +111,18 @@ public class CredentialsAdapter extends RecyclerView.Adapter<CredentialsItemHold
     public void setItems(List<CredentialsItem> credentials) {
         items = credentials;
         notifyDataSetChanged();
+    }
+
+    @Override
+    public void onItemDismiss(int position) {
+        items.remove(position);
+        notifyItemRemoved(position);
+    }
+
+    @Override
+    public boolean onItemMove(int fromPosition, int toPosition) {
+        Collections.swap(items, fromPosition, toPosition);
+        notifyItemMoved(fromPosition, toPosition);
+        return true;
     }
 }

@@ -8,6 +8,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -15,6 +16,8 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mirash.passkeeper.Const;
 import com.mirash.passkeeper.R;
 import com.mirash.passkeeper.db.Credentials;
+import com.mirash.passkeeper.drag.OnStartDragListener;
+import com.mirash.passkeeper.drag.SimpleItemTouchHelperCallback;
 import com.mirash.passkeeper.model.CredentialsItem;
 import com.mirash.passkeeper.tool.Utils;
 import com.mirash.passkeeper.tool.decoration.DividerListItemDecoration;
@@ -28,12 +31,12 @@ import java.util.List;
 /**
  * @author Mirash
  */
-public class MainActivity extends AppCompatActivity implements Observer<List<Credentials>>, CredentialsItemCallback {
+public class MainActivity extends AppCompatActivity implements Observer<List<Credentials>>, CredentialsItemCallback, OnStartDragListener {
 
     private MainActivityModel model;
     private RecyclerView credentialsRecycler;
     private FloatingActionButton addButton;
-    private boolean isEditScreenShown;
+    private ItemTouchHelper itemTouchHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +53,8 @@ public class MainActivity extends AppCompatActivity implements Observer<List<Cre
         credentialsRecycler.addItemDecoration(new DividerListItemDecoration(this));
         credentialsRecycler.addItemDecoration(new VerticalBottomSpaceItemDecoration(
                 getResources().getDimensionPixelSize(R.dimen.main_bottom_padding)));
+
+
         model = new ViewModelProvider(this).get(MainActivityModel.class);
         model.getCredentialsModelLiveData().observe(this, this);
         addButton = findViewById(R.id.credentials_add_fab);
@@ -73,9 +78,17 @@ public class MainActivity extends AppCompatActivity implements Observer<List<Cre
         if (adapter == null) {
             adapter = new CredentialsAdapter(credentialsItems, this);
             credentialsRecycler.setAdapter(adapter);
+            ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(adapter);
+            itemTouchHelper = new ItemTouchHelper(callback);
+            itemTouchHelper.attachToRecyclerView(credentialsRecycler);
         } else {
             adapter.setItems(credentialsItems);
         }
+    }
+
+    @Override
+    public void onDragStart(RecyclerView.ViewHolder viewHolder) {
+        itemTouchHelper.startDrag(viewHolder);
     }
 
     @Override
@@ -90,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements Observer<List<Cre
 
     private void showEditCredentialsScreen(Integer id) {
         Intent intent = new Intent(this, CredentialsEditActivity.class);
-        if(id != null) intent.putExtra(Const.KEY_ID, id);
+        if (id != null) intent.putExtra(Const.KEY_ID, id);
         startActivityForResult(intent, Const.REQUEST_CODE_EDIT);
     }
 }
