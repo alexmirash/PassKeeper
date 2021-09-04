@@ -18,7 +18,10 @@ class CredentialsItemHolder extends RecyclerView.ViewHolder {
     final TextView titleView;
     final TextView linkView;
     final TextView loginView;
+    final View passwordSectionView;
     final TextView passwordView;
+    final View pinSectionView;
+    final TextView pinView;
     final View editButton;
     final CheckBox passwordVisibilityCheckBox;
     final TextView details = null;
@@ -31,7 +34,10 @@ class CredentialsItemHolder extends RecyclerView.ViewHolder {
         linkView = headerView.findViewById(R.id.item_link_text);
         editButton = itemView.findViewById(R.id.item_edit_button);
         loginView = itemView.findViewById(R.id.item_login_text);
-        passwordView = itemView.findViewById(R.id.item_password_text);
+        passwordSectionView = itemView.findViewById(R.id.item_password_section);
+        passwordView = passwordSectionView.findViewById(R.id.item_password_text);
+        pinSectionView = itemView.findViewById(R.id.item_pin_section);
+        pinView = pinSectionView.findViewById(R.id.item_pin_text);
         passwordVisibilityCheckBox = itemView.findViewById(R.id.item_password_visibility_checkbox);
     }
 }

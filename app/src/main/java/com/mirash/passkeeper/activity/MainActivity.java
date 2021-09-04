@@ -18,6 +18,7 @@ import com.mirash.passkeeper.db.Credentials;
 import com.mirash.passkeeper.model.CredentialsItem;
 import com.mirash.passkeeper.tool.Utils;
 import com.mirash.passkeeper.tool.decoration.DividerListItemDecoration;
+import com.mirash.passkeeper.tool.decoration.VerticalBottomSpaceItemDecoration;
 import com.mirash.passkeeper.ui.main.CredentialsAdapter;
 import com.mirash.passkeeper.ui.main.CredentialsItemCallback;
 
@@ -47,6 +48,8 @@ public class MainActivity extends AppCompatActivity implements Observer<List<Cre
         credentialsRecycler = findViewById(R.id.credentials_list);
         credentialsRecycler.setLayoutManager(new LinearLayoutManager(this));
         credentialsRecycler.addItemDecoration(new DividerListItemDecoration(this));
+        credentialsRecycler.addItemDecoration(new VerticalBottomSpaceItemDecoration(
+                getResources().getDimensionPixelSize(R.dimen.main_bottom_padding)));
         model = new ViewModelProvider(this).get(MainActivityModel.class);
         model.getCredentialsModelLiveData().observe(this, this);
         addButton = findViewById(R.id.credentials_add_fab);

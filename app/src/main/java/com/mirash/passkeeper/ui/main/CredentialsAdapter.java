@@ -59,14 +59,33 @@ public class CredentialsAdapter extends RecyclerView.Adapter<CredentialsItemHold
         holder.linkView.setText(link);
         holder.loginView.setText(item.getLogin());
         String password = item.getPassword();
-        if (!item.isPasswordVisible()) {
-            StringBuilder builder = new StringBuilder();
-            for (int i = 0; i < password.length(); i++) {
-                builder.append("•");
+        if (TextUtils.isEmpty(password)) {
+            holder.passwordSectionView.setVisibility(View.GONE);
+        } else {
+            holder.passwordSectionView.setVisibility(View.VISIBLE);
+            if (!item.isPasswordVisible()) {
+                StringBuilder builder = new StringBuilder();
+                for (int i = 0; i < password.length(); i++) {
+                    builder.append("•");
+                }
+                password = builder.toString();
             }
-            password = builder.toString();
         }
         holder.passwordView.setText(password);
+        String pin = item.getPin();
+        if (TextUtils.isEmpty(pin)) {
+            holder.pinSectionView.setVisibility(View.GONE);
+        } else {
+            holder.pinSectionView.setVisibility(View.VISIBLE);
+            if (!item.isPasswordVisible()) {
+                StringBuilder builder = new StringBuilder();
+                for (int i = 0; i < pin.length(); i++) {
+                    builder.append("•");
+                }
+                pin = builder.toString();
+            }
+        }
+        holder.pinView.setText(pin);
         int id = item.getId();
         holder.editButton.setOnClickListener(view -> callback.onEditClick(id));
         holder.passwordVisibilityCheckBox.setOnCheckedChangeListener((compoundButton, checked) -> {

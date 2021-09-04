@@ -1,4 +1,4 @@
-package com.mirash.passkeeper.edit;
+package com.mirash.passkeeper.activity;
 
 import android.app.Application;
 
@@ -20,10 +20,15 @@ import java.util.concurrent.Executors;
  * @author Mirash
  */
 public class CredentialsEditViewModel extends AndroidViewModel {
+    public static final int INDEX_TITLE = 0;
+    public static final int INDEX_LINK = 1;
+    public static final int INDEX_LOGIN = 2;
+    public static final int INDEX_PASSWORD = 3;
+    public static final int INDEX_PIN = 4;
     private LiveData<Credentials> credentialsLiveData;
     private Integer credentialsId;
-    private final boolean[] fillStates = new boolean[]{false, false, false, false};
-    private MutableLiveData<Boolean> saveButtonEnableStateLiveData;
+    private final boolean[] fillStates = new boolean[]{false, false, false, false, false};
+    private final MutableLiveData<Boolean> saveButtonEnableStateLiveData;
 
     public CredentialsEditViewModel(@NonNull Application application) {
         super(application);
@@ -75,6 +80,7 @@ public class CredentialsEditViewModel extends AndroidViewModel {
         to.setLink(from.getLink());
         to.setLogin(from.getLogin());
         to.setPassword(from.getPassword());
+        to.setPin(from.getPin());
         to.setDetails(from.getDetails());
     }
 
@@ -88,7 +94,8 @@ public class CredentialsEditViewModel extends AndroidViewModel {
 
     public void setFillState(int index, boolean state) {
         fillStates[index] = state;
-        boolean result = (fillStates[0] || fillStates[1]) && fillStates[2] && fillStates[3];
+        boolean result = (fillStates[INDEX_TITLE] || fillStates[INDEX_LINK])
+                && fillStates[INDEX_LOGIN] && (fillStates[INDEX_PASSWORD] || fillStates[INDEX_PIN]);
         saveButtonEnableStateLiveData.setValue(result);
     }
 }

@@ -19,7 +19,7 @@ import java.util.concurrent.Executors;
 /**
  * @author Mirash
  */
-@Database(entities = {Credentials.class}, version = 1, exportSchema = false)
+@Database(entities = {Credentials.class}, version = 2, exportSchema = false)
 public abstract class CredentialsDatabase extends RoomDatabase {
     private static final String NAME = "CredentialsDb";
 

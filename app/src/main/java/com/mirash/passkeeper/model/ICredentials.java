@@ -12,6 +12,8 @@ public interface ICredentials {
 
     String getPassword();
 
+    String getPin();
+
     String getDetails();
 
     int getId();

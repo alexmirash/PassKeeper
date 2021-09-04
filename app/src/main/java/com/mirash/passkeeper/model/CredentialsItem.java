@@ -34,6 +34,11 @@ public class CredentialsItem implements ICredentials {
     }
 
     @Override
+    public String getPin() {
+        return credentials.getPin();
+    }
+
+    @Override
     public String getDetails() {
         return credentials.getDetails();
     }

@@ -8,6 +8,7 @@ public class CredentialsModel implements ICredentials {
     protected String link;
     protected String login;
     protected String password;
+    protected String pin;
     protected String details;
 
     @Override
@@ -28,6 +29,11 @@ public class CredentialsModel implements ICredentials {
     @Override
     public String getPassword() {
         return password;
+    }
+
+    @Override
+    public String getPin() {
+        return pin;
     }
 
     @Override
@@ -56,6 +62,10 @@ public class CredentialsModel implements ICredentials {
         this.password = password;
     }
 
+    public void setPin(String pin) {
+        this.pin = pin;
+    }
+
     public void setDetails(String details) {
         this.details = details;
     }
@@ -67,6 +77,7 @@ public class CredentialsModel implements ICredentials {
                 ", link='" + link + '\'' +
                 ", login='" + login + '\'' +
                 ", password='" + password + '\'' +
+                ", pin='" + pin + '\'' +
                 ", details='" + details + '\'' +
                 '}';
     }
