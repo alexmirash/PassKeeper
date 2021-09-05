@@ -14,6 +14,7 @@ import com.mirash.passkeeper.db.repository.RepositoryProvider;
 import com.mirash.passkeeper.model.CredentialsModel;
 import com.mirash.passkeeper.model.ICredentials;
 
+import java.util.List;
 import java.util.concurrent.Executors;
 
 /**
@@ -26,9 +27,11 @@ public class CredentialsEditViewModel extends AndroidViewModel {
     public static final int INDEX_PASSWORD = 3;
     public static final int INDEX_PIN = 4;
     private LiveData<Credentials> credentialsLiveData;
-    private Integer credentialsId;
     private final boolean[] fillStates = new boolean[]{false, false, false, false, false};
     private final MutableLiveData<Boolean> saveButtonEnableStateLiveData;
+
+    private Integer credentialsId;
+    private int credentialsPosition;
 
     public CredentialsEditViewModel(@NonNull Application application) {
         super(application);
@@ -40,9 +43,17 @@ public class CredentialsEditViewModel extends AndroidViewModel {
         credentialsLiveData = RepositoryProvider.getCredentialsRepository().getCredentialsById(credentialsId);
     }
 
+    public void setCredentialsPosition(int position) {
+        credentialsPosition = position;
+    }
+
     @Nullable
     public Integer getCredentialsId() {
         return credentialsId;
+    }
+
+    public int getCredentialsPosition() {
+        return credentialsPosition;
     }
 
     public LiveData<Credentials> getCredentialsLiveData() {
@@ -82,12 +93,19 @@ public class CredentialsEditViewModel extends AndroidViewModel {
         to.setPassword(from.getPassword());
         to.setPin(from.getPin());
         to.setDetails(from.getDetails());
+        to.setPosition(from.getPosition());
     }
 
     public void deleteCredentials() {
         Executors.newSingleThreadScheduledExecutor().execute(() -> {
             if (credentialsId != null) {
                 RepositoryProvider.getCredentialsRepository().deleteCredentialsById(credentialsId);
+                List<Credentials> credentials = RepositoryProvider.getCredentialsRepository()
+                        .getCredentialsUnderPositionSync(credentialsPosition);
+                for (Credentials c : credentials) {
+                    c.setPosition(c.getPosition() - 1);
+                }
+                RepositoryProvider.getCredentialsRepository().updateAll(credentials);
             }
         });
     }

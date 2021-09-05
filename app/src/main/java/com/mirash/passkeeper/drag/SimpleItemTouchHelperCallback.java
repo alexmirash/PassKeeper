@@ -3,7 +3,6 @@ package com.mirash.passkeeper.drag;
 import android.graphics.Canvas;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -29,17 +28,17 @@ public class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback {
     }
 
     @Override
-    public int getMovementFlags(RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
+    public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
         // Set movement flags based on the layout manager
-        if (recyclerView.getLayoutManager() instanceof GridLayoutManager) {
-            final int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT;
-            final int swipeFlags = 0;
-            return makeMovementFlags(dragFlags, swipeFlags);
-        } else {
-            final int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
-            final int swipeFlags = ItemTouchHelper.START | ItemTouchHelper.END;
-            return makeMovementFlags(dragFlags, swipeFlags);
-        }
+//        if (recyclerView.getLayoutManager() instanceof GridLayoutManager) {
+//            final int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT;
+//            final int swipeFlags = 0;
+//            return makeMovementFlags(dragFlags, swipeFlags);
+//        } else {
+        final int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
+        final int swipeFlags = ItemTouchHelper.START | ItemTouchHelper.END;
+        return makeMovementFlags(dragFlags, swipeFlags);
+//        }
     }
 
     @Override

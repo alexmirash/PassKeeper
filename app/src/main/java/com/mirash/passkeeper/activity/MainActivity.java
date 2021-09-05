@@ -2,8 +2,10 @@ package com.mirash.passkeeper.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
@@ -35,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements Observer<List<Cre
 
     private MainActivityModel model;
     private RecyclerView credentialsRecycler;
+    private CredentialsAdapter adapter;
     private FloatingActionButton addButton;
     private ItemTouchHelper itemTouchHelper;
 
@@ -54,11 +57,10 @@ public class MainActivity extends AppCompatActivity implements Observer<List<Cre
         credentialsRecycler.addItemDecoration(new VerticalBottomSpaceItemDecoration(
                 getResources().getDimensionPixelSize(R.dimen.main_bottom_padding)));
 
-
         model = new ViewModelProvider(this).get(MainActivityModel.class);
         model.getCredentialsModelLiveData().observe(this, this);
         addButton = findViewById(R.id.credentials_add_fab);
-        addButton.setOnClickListener(view -> showEditCredentialsScreen(null));
+        addButton.setOnClickListener(view -> showEditCredentialsScreen());
     }
 
     @Override
@@ -69,8 +71,8 @@ public class MainActivity extends AppCompatActivity implements Observer<List<Cre
 
     @Override
     public void onChanged(List<Credentials> credentials) {
-        Log.d("LOL", "onChanged:" + credentials.size());
-        CredentialsAdapter adapter = (CredentialsAdapter) credentialsRecycler.getAdapter();
+        Log.d("LOL", "onChanged:\n" + TextUtils.join("\n", credentials));
+        adapter = (CredentialsAdapter) credentialsRecycler.getAdapter();
         List<CredentialsItem> credentialsItems = new ArrayList<>(credentials.size());
         for (Credentials value : credentials) {
             credentialsItems.add(new CredentialsItem(value));
@@ -97,13 +99,30 @@ public class MainActivity extends AppCompatActivity implements Observer<List<Cre
     }
 
     @Override
-    public void onEditClick(int id) {
-        showEditCredentialsScreen(id);
+    public void onEditClick(int id, int position) {
+        showEditCredentialsScreen(id, position);
     }
 
-    private void showEditCredentialsScreen(Integer id) {
+    @Override
+    public void onOrderChanged(List<CredentialsItem> items) {
+        model.handleOrderChanged(items);
+    }
+
+    private void showEditCredentialsScreen() {
+        showEditCredentialsScreen(null, adapter.getItemCount());
+    }
+
+    private void showEditCredentialsScreen(Integer id, int position) {
         Intent intent = new Intent(this, CredentialsEditActivity.class);
         if (id != null) intent.putExtra(Const.KEY_ID, id);
+        intent.putExtra(Const.KEY_POSITION, position);
         startActivityForResult(intent, Const.REQUEST_CODE_EDIT);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == Const.REQUEST_CODE_EDIT) {
+        }
     }
 }

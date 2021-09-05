@@ -10,6 +10,7 @@ public class CredentialsModel implements ICredentials {
     protected String password;
     protected String pin;
     protected String details;
+    protected int position;
 
     @Override
     public String getTitle() {
@@ -42,6 +43,11 @@ public class CredentialsModel implements ICredentials {
     }
 
     @Override
+    public int getPosition() {
+        return position;
+    }
+
+    @Override
     public int getId() {
         return 0;
     }
@@ -70,9 +76,13 @@ public class CredentialsModel implements ICredentials {
         this.details = details;
     }
 
+    public void setPosition(int position) {
+        this.position = position;
+    }
+
     @Override
     public String toString() {
-        return "CredentialsItem{" +
+        return "CredentialsItem[" + position + "]{" +
                 "title='" + title + '\'' +
                 ", link='" + link + '\'' +
                 ", login='" + login + '\'' +

@@ -48,6 +48,11 @@ public class CredentialsItem implements ICredentials {
         return credentials.getId();
     }
 
+    @Override
+    public int getPosition() {
+        return credentials.getPosition();
+    }
+
     public void setPasswordVisible(boolean passwordVisible) {
         isPasswordVisible = passwordVisible;
     }

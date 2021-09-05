@@ -15,10 +15,10 @@ import java.util.List;
 @Dao
 public interface CredentialsDao {
 
-    @Query("SELECT * FROM Credentials")
+    @Query("SELECT * FROM Credentials ORDER BY position ASC")
     LiveData<List<Credentials>> getAll();
 
-    @Query("SELECT * FROM Credentials")
+    @Query("SELECT * FROM Credentials ORDER BY position ASC")
     List<Credentials> getAllSync();
 
     @Query("SELECT * FROM Credentials WHERE id= :id")
@@ -35,6 +35,9 @@ public interface CredentialsDao {
 
     @Query("DELETE FROM Credentials WHERE id = :id")
     void deleteById(int id);
+
+    @Query("SELECT * FROM Credentials WHERE position > :position")
+    List<Credentials> getUnderPositionSync(int position);
 
     @Insert
     void insertAll(List<Credentials> entries);

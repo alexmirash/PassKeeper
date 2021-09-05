@@ -8,8 +8,11 @@ import androidx.lifecycle.LiveData;
 
 import com.mirash.passkeeper.db.Credentials;
 import com.mirash.passkeeper.db.repository.RepositoryProvider;
+import com.mirash.passkeeper.model.CredentialsItem;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executors;
 
 /**
  * @author Mirash
@@ -24,5 +27,22 @@ public class MainActivityModel extends AndroidViewModel {
 
     public LiveData<List<Credentials>> getCredentialsModelLiveData() {
         return credentialsModelLiveData;
+    }
+
+    public void handleOrderChanged(List<CredentialsItem> items) {
+        Executors.newSingleThreadScheduledExecutor().execute(() -> {
+            handleOrderChangedSync(items);
+        });
+    }
+
+    public void handleOrderChangedSync(List<CredentialsItem> items) {
+        List<Credentials> credentials = new ArrayList<>();
+        for (int i = 0; i < items.size(); i++) {
+            int id = items.get(i).getId();
+            Credentials credById = RepositoryProvider.getCredentialsRepository().getCredentialsByIdSync(id);
+            credById.setPosition(i);
+            credentials.add(credById);
+        }
+        RepositoryProvider.getCredentialsRepository().updateAll(credentials);
     }
 }

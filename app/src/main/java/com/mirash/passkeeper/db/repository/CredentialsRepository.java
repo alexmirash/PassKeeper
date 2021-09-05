@@ -45,7 +45,7 @@ public class CredentialsRepository {
         return dao.getAll();
     }
 
-    public List<Credentials> getAllEntryDataSync() {
+    public List<Credentials> getAllCredentialsSync() {
         return dao.getAllSync();
     }
 
@@ -57,6 +57,9 @@ public class CredentialsRepository {
         return dao.getByIdSync(id);
     }
 
+    public List<Credentials> getCredentialsUnderPositionSync(int position) {
+        return dao.getUnderPositionSync(position);
+    }
 
     public void deleteCredentialsById(int id) {
         dao.deleteById(id);

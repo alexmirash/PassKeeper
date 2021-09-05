@@ -90,16 +90,16 @@ public class CredentialsAdapter extends RecyclerView.Adapter<CredentialsItemHold
         }
         holder.pinView.setText(pin);
         int id = item.getId();
-        holder.editButton.setOnClickListener(view -> callback.onEditClick(id));
+        holder.editButton.setOnClickListener(view -> callback.onEditClick(id, position));
         holder.passwordVisibilityCheckBox.setOnCheckedChangeListener((compoundButton, checked) -> {
             items.get(position).setPasswordVisible(checked);
             notifyItemChanged(position, checked);
         });
         //drag
-        holder.itemView.setOnLongClickListener(view -> {
-            callback.onDragStart(holder);
-            return false;
-        });
+//        holder.itemView.setOnLongClickListener(view -> {
+//            callback.onDragStart(holder);
+//            return false;
+//        });
     }
 
     @Override
@@ -123,6 +123,7 @@ public class CredentialsAdapter extends RecyclerView.Adapter<CredentialsItemHold
     public boolean onItemMove(int fromPosition, int toPosition) {
         Collections.swap(items, fromPosition, toPosition);
         notifyItemMoved(fromPosition, toPosition);
+        callback.onOrderChanged(items);
         return true;
     }
 }

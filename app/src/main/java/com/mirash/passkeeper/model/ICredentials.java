@@ -17,4 +17,6 @@ public interface ICredentials {
     String getDetails();
 
     int getId();
+
+    int getPosition();
 }

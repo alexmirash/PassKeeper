@@ -1,5 +1,6 @@
 package com.mirash.passkeeper.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -16,6 +17,7 @@ import com.mirash.passkeeper.Const;
 import com.mirash.passkeeper.R;
 import com.mirash.passkeeper.db.Credentials;
 import com.mirash.passkeeper.model.CredentialsModel;
+import com.mirash.passkeeper.tool.EditResultAction;
 import com.mirash.passkeeper.view.StyledTextInputLayout;
 
 /**
@@ -48,10 +50,14 @@ public class CredentialsEditActivity extends AppCompatActivity implements Observ
 
         model = new ViewModelProvider(this).get(CredentialsEditViewModel.class);
         Bundle args = getIntent().getExtras();
-        if (args != null && args.containsKey(Const.KEY_ID)) {
-            int id = getIntent().getIntExtra(Const.KEY_ID, 0);
-            model.setCredentialsId(id);
-            model.getCredentialsLiveData().observe(this, this);
+        if (args != null) {
+            if (args.containsKey(Const.KEY_ID)) {
+                int id = getIntent().getIntExtra(Const.KEY_ID, 0);
+                model.setCredentialsId(id);
+                model.getCredentialsLiveData().observe(this, this);
+            }
+            int position = getIntent().getIntExtra(Const.KEY_POSITION, 0);
+            model.setCredentialsPosition(position);
         }
         initSaveButtonStateObserver();
     }
@@ -64,7 +70,11 @@ public class CredentialsEditActivity extends AppCompatActivity implements Observ
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(model.getCredentialsId() == null ? R.menu.credentials_save_menu : R.menu.credentials_edit_menu, menu);
+        if (model.getCredentialsId() == null) {
+            getMenuInflater().inflate(R.menu.credentials_save_menu, menu);
+        } else {
+            getMenuInflater().inflate(R.menu.credentials_edit_menu, menu);
+        }
         saveMenuItem = menu.findItem(R.id.credentials_edit_save);
         model.getSaveButtonEnableStateLiveData().observe(this, enabled -> {
             saveMenuItem.setEnabled(enabled);
@@ -82,15 +92,18 @@ public class CredentialsEditActivity extends AppCompatActivity implements Observ
         } else if (id == R.id.credentials_edit_save) {
             saveCredentials();
         } else if (id == R.id.credentials_edit_delete) {
-            model.deleteCredentials();
-            onBackPressed();
+            deleteCredentials();
         }
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     public void onChanged(Credentials credentials) {
-        if (credentials == null) return;
+        if (credentials == null) {
+            setResult(RESULT_CANCELED);
+            finish();
+            return;
+        }
         titleInputLayout.setTextWithNoAnimation(credentials.getTitle());
         linkInputLayout.setTextWithNoAnimation(credentials.getLink());
         loginInputLayout.setTextWithNoAnimation(credentials.getLogin());
@@ -107,8 +120,26 @@ public class CredentialsEditActivity extends AppCompatActivity implements Observ
         credentialsModel.setPassword(passwordInputLayout.getText());
         credentialsModel.setPin(pinInputLayout.getText());
         credentialsModel.setDetails(detailsInputLayout.getText());
+        credentialsModel.setPosition(model.getCredentialsPosition());
         model.saveCredentials(credentialsModel);
-        onBackPressed();
+        Intent data = new Intent();
+        if (model.getCredentialsId() == null) {
+            data.putExtra(Const.KEY_EDIT_RESULT_ACTION, EditResultAction.NEW);
+        } else {
+            data.putExtra(Const.KEY_EDIT_RESULT_ACTION, EditResultAction.UPDATE);
+        }
+        data.putExtra(Const.KEY_POSITION, model.getCredentialsPosition());
+        setResult(RESULT_OK, data);
+        finish();
+    }
+
+    private void deleteCredentials() {
+        model.deleteCredentials();
+        Intent data = new Intent();
+        data.putExtra(Const.KEY_POSITION, model.getCredentialsPosition());
+        data.putExtra(Const.KEY_EDIT_RESULT_ACTION, EditResultAction.DELETE);
+        setResult(RESULT_OK, data);
+        finish();
     }
 
     private void initSaveButtonStateObserver() {
