@@ -14,4 +14,6 @@ public interface CredentialsItemCallback extends OnStartDragListener {
     void onEditClick(int id, int position);
 
     void onOrderChanged(List<CredentialsItem> items);
+
+    void onShare(CredentialsItem item);
 }

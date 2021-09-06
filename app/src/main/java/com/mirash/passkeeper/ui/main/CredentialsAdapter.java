@@ -60,6 +60,13 @@ public class CredentialsAdapter extends RecyclerView.Adapter<CredentialsItemHold
             holder.headerView.setOnClickListener(view -> callback.onLinkClick(link));
         }
         holder.linkView.setText(link);
+        String details = item.getDetails();
+        if (TextUtils.isEmpty(details)) {
+            holder.detailsView.setVisibility(View.GONE);
+        } else {
+            holder.detailsView.setVisibility(View.VISIBLE);
+        }
+        holder.detailsView.setText(details);
         holder.loginView.setText(item.getLogin());
         String password = item.getPassword();
         if (TextUtils.isEmpty(password)) {
@@ -95,6 +102,7 @@ public class CredentialsAdapter extends RecyclerView.Adapter<CredentialsItemHold
             items.get(position).setPasswordVisible(checked);
             notifyItemChanged(position, checked);
         });
+        holder.shareButton.setOnClickListener(view -> callback.onShare(item));
         //drag
         holder.itemView.setOnLongClickListener(view -> {
             callback.onDragStart(holder);

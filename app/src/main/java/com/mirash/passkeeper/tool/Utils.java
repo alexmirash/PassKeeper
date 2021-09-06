@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.net.Uri;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
@@ -12,12 +14,19 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.google.android.material.textfield.TextInputLayout;
+import com.mirash.passkeeper.PassKeeperApp;
+import com.mirash.passkeeper.R;
+import com.mirash.passkeeper.model.ICredentials;
 
 /**
  * @author Mirash
  */
 public final class Utils {
-    public static void openLinkExternally(Activity activity, String link) throws ActivityNotFoundException {
+    public static void openLinkExternally(@NonNull Activity activity, String link) throws ActivityNotFoundException {
+        if (link == null) return;
+        if (!link.startsWith("http://") && !link.startsWith("https://")) {
+            link = "http://" + link;
+        }
         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
         try {
             activity.startActivity(browserIntent);
@@ -55,5 +64,41 @@ public final class Utils {
     public static void hideKeyboard(@NonNull TextInputLayout textInputLayout) {
         textInputLayout.clearFocus();
         hideKeyboardInternal(textInputLayout.getContext(), textInputLayout);
+    }
+
+    public static void share(Activity activity, String data) {
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, data);
+        sendIntent.setType("text/*");
+        Intent shareIntent = Intent.createChooser(sendIntent, null);
+        activity.startActivity(shareIntent);
+    }
+
+    public static String fromCredentials(ICredentials credentials) {
+        Resources res = PassKeeperApp.getRes();
+        StringBuilder builder = new StringBuilder();
+        String item = credentials.getTitle();
+        if (!TextUtils.isEmpty(item)) {
+            builder.append(item).append("\n");
+        }
+        item = credentials.getLink();
+        if (!TextUtils.isEmpty(item)) {
+            builder.append(item).append("\n");
+        }
+        builder.append(res.getString(R.string.login)).append(":").append(credentials.getLogin()).append("\n");
+        item = credentials.getPassword();
+        if (!TextUtils.isEmpty(item)) {
+            builder.append(res.getString(R.string.password)).append(":").append(item).append("\n");
+        }
+        item = credentials.getPin();
+        if (!TextUtils.isEmpty(item)) {
+            builder.append(res.getString(R.string.pin)).append(":").append(item).append("\n");
+        }
+        item = credentials.getDetails();
+        if (!TextUtils.isEmpty(item)) {
+            builder.append(item).append("\n");
+        }
+        return builder.toString();
     }
 }

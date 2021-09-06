@@ -1,5 +1,7 @@
 package com.mirash.passkeeper.model;
 
+import androidx.annotation.NonNull;
+
 import com.mirash.passkeeper.db.Credentials;
 
 /**
@@ -59,5 +61,11 @@ public class CredentialsItem implements ICredentials {
 
     public boolean isPasswordVisible() {
         return isPasswordVisible;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return credentials.toString();
     }
 }

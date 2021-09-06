@@ -6,6 +6,7 @@
     <dimen name="quarter_padding">4dp</dimen>
     <dimen name="small_padding">12dp</dimen>
     <dimen name="large_padding">24dp</dimen>
+    <dimen name="triple_margin">48dp</dimen>
     <dimen name="main_bottom_padding">96dp</dimen>
 
     <!-- text sizes -->
