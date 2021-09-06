@@ -96,10 +96,10 @@ public class CredentialsAdapter extends RecyclerView.Adapter<CredentialsItemHold
             notifyItemChanged(position, checked);
         });
         //drag
-//        holder.itemView.setOnLongClickListener(view -> {
-//            callback.onDragStart(holder);
-//            return false;
-//        });
+        holder.itemView.setOnLongClickListener(view -> {
+            callback.onDragStart(holder);
+            return false;
+        });
     }
 
     @Override
@@ -125,5 +125,9 @@ public class CredentialsAdapter extends RecyclerView.Adapter<CredentialsItemHold
         notifyItemMoved(fromPosition, toPosition);
         callback.onOrderChanged(items);
         return true;
+    }
+
+    public List<CredentialsItem> getItems() {
+        return items;
     }
 }

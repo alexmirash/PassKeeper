@@ -10,11 +10,11 @@ import java.lang.annotation.RetentionPolicy;
 /**
  * @author Mirash
  */
-@IntDef(flag = true, value = {EditResultAction.NEW, EditResultAction.UPDATE, EditResultAction.DELETE, EditResultAction.UNDEFINED})
+@IntDef(flag = true, value = {EditResultAction.CREATE, EditResultAction.UPDATE, EditResultAction.DELETE, EditResultAction.UNDEFINED})
 @Retention(RetentionPolicy.SOURCE)
 @SuppressLint("ShiftFlags")
 public @interface EditResultAction {
-    int NEW = 1;
+    int CREATE = 1;
     int UPDATE = 2;
     int DELETE = 3;
     int UNDEFINED = -1;

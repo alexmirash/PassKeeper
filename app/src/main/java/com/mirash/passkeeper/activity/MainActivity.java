@@ -18,9 +18,11 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mirash.passkeeper.Const;
 import com.mirash.passkeeper.R;
 import com.mirash.passkeeper.db.Credentials;
+import com.mirash.passkeeper.drag.ItemTouchStateCallback;
 import com.mirash.passkeeper.drag.OnStartDragListener;
 import com.mirash.passkeeper.drag.SimpleItemTouchHelperCallback;
 import com.mirash.passkeeper.model.CredentialsItem;
+import com.mirash.passkeeper.tool.EditResultAction;
 import com.mirash.passkeeper.tool.Utils;
 import com.mirash.passkeeper.tool.decoration.DividerListItemDecoration;
 import com.mirash.passkeeper.tool.decoration.VerticalBottomSpaceItemDecoration;
@@ -33,7 +35,8 @@ import java.util.List;
 /**
  * @author Mirash
  */
-public class MainActivity extends AppCompatActivity implements Observer<List<Credentials>>, CredentialsItemCallback, OnStartDragListener {
+public class MainActivity extends AppCompatActivity implements Observer<List<Credentials>>,
+        CredentialsItemCallback, OnStartDragListener, ItemTouchStateCallback {
 
     private MainActivityModel model;
     private RecyclerView credentialsRecycler;
@@ -70,6 +73,21 @@ public class MainActivity extends AppCompatActivity implements Observer<List<Cre
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == Const.REQUEST_CODE_EDIT) {
+            if (resultCode == RESULT_OK) {
+                if (data != null) {
+                    @EditResultAction int action = data.getIntExtra(Const.KEY_EDIT_RESULT_ACTION, EditResultAction.UNDEFINED);
+                    if (action == EditResultAction.CREATE) {
+                        credentialsRecycler.scrollToPosition(adapter.getItemCount() - 1);
+                    }
+                }
+            }
+        }
+    }
+
+    @Override
     public void onChanged(List<Credentials> credentials) {
         Log.d("LOL", "onChanged:\n" + TextUtils.join("\n", credentials));
         adapter = (CredentialsAdapter) credentialsRecycler.getAdapter();
@@ -80,17 +98,13 @@ public class MainActivity extends AppCompatActivity implements Observer<List<Cre
         if (adapter == null) {
             adapter = new CredentialsAdapter(credentialsItems, this);
             credentialsRecycler.setAdapter(adapter);
-            ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(adapter);
+            SimpleItemTouchHelperCallback callback = new SimpleItemTouchHelperCallback(adapter);
+            callback.setTouchStateCallback(this);
             itemTouchHelper = new ItemTouchHelper(callback);
             itemTouchHelper.attachToRecyclerView(credentialsRecycler);
         } else {
             adapter.setItems(credentialsItems);
         }
-    }
-
-    @Override
-    public void onDragStart(RecyclerView.ViewHolder viewHolder) {
-        itemTouchHelper.startDrag(viewHolder);
     }
 
     @Override
@@ -105,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements Observer<List<Cre
 
     @Override
     public void onOrderChanged(List<CredentialsItem> items) {
-        model.handleOrderChanged(items);
+        Log.d("LOL", "onOrderChanged");
     }
 
     private void showEditCredentialsScreen() {
@@ -119,10 +133,18 @@ public class MainActivity extends AppCompatActivity implements Observer<List<Cre
         startActivityForResult(intent, Const.REQUEST_CODE_EDIT);
     }
 
+    //not used
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == Const.REQUEST_CODE_EDIT) {
-        }
+    public void onDragStart(RecyclerView.ViewHolder viewHolder) {
+        itemTouchHelper.startDrag(viewHolder);
+    }
+
+    @Override
+    public void onItemSelected() {
+    }
+
+    @Override
+    public void onItemClear() {
+        model.handleOrderChanged(adapter.getItems());
     }
 }

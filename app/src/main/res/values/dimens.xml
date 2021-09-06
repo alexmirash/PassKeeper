@@ -6,7 +6,7 @@
     <dimen name="quarter_padding">4dp</dimen>
     <dimen name="small_padding">12dp</dimen>
     <dimen name="large_padding">24dp</dimen>
-    <dimen name="main_bottom_padding">88dp</dimen>
+    <dimen name="main_bottom_padding">96dp</dimen>
 
     <!-- text sizes -->
     <dimen name="text_size_title">24sp</dimen>
@@ -15,6 +15,7 @@
     <dimen name="text_size_small">14sp</dimen>
 
     <dimen name="icon_size_default">24dp</dimen>
+    <dimen name="icon_size_large">36dp</dimen>
     <dimen name="icon_size_default_with_padding">40dp</dimen>
     <dimen name="delimiter_size">1dp</dimen>
 </resources>

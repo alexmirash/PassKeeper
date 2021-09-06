@@ -82,7 +82,7 @@ public class CredentialsModel implements ICredentials {
 
     @Override
     public String toString() {
-        return "CredentialsItem[" + position + "]{" +
+        return "[" + position + "]{" +
                 "title='" + title + '\'' +
                 ", link='" + link + '\'' +
                 ", login='" + login + '\'' +

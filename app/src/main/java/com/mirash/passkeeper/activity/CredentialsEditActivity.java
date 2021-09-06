@@ -124,7 +124,7 @@ public class CredentialsEditActivity extends AppCompatActivity implements Observ
         model.saveCredentials(credentialsModel);
         Intent data = new Intent();
         if (model.getCredentialsId() == null) {
-            data.putExtra(Const.KEY_EDIT_RESULT_ACTION, EditResultAction.NEW);
+            data.putExtra(Const.KEY_EDIT_RESULT_ACTION, EditResultAction.CREATE);
         } else {
             data.putExtra(Const.KEY_EDIT_RESULT_ACTION, EditResultAction.UPDATE);
         }
@@ -143,7 +143,15 @@ public class CredentialsEditActivity extends AppCompatActivity implements Observ
     }
 
     private void initSaveButtonStateObserver() {
-        titleInputLayout.addTextChangedListener(new TextWatcher() {
+        initTextFillObserver(titleInputLayout, CredentialsEditViewModel.INDEX_TITLE);
+        initTextFillObserver(linkInputLayout, CredentialsEditViewModel.INDEX_LINK);
+        initTextFillObserver(loginInputLayout, CredentialsEditViewModel.INDEX_LOGIN);
+        initTextFillObserver(passwordInputLayout, CredentialsEditViewModel.INDEX_PASSWORD);
+        initTextFillObserver(pinInputLayout, CredentialsEditViewModel.INDEX_PIN);
+    }
+
+    private void initTextFillObserver(StyledTextInputLayout inputLayout, int index) {
+        inputLayout.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             }
@@ -154,63 +162,7 @@ public class CredentialsEditActivity extends AppCompatActivity implements Observ
 
             @Override
             public void afterTextChanged(Editable editable) {
-                model.setFillState(CredentialsEditViewModel.INDEX_TITLE, editable.length() > 0);
-            }
-        });
-        linkInputLayout.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                model.setFillState(CredentialsEditViewModel.INDEX_LINK, editable.length() > 0);
-            }
-        });
-        loginInputLayout.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                model.setFillState(CredentialsEditViewModel.INDEX_LOGIN, editable.length() > 0);
-            }
-        });
-        passwordInputLayout.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                model.setFillState(CredentialsEditViewModel.INDEX_PASSWORD, editable.length() > 0);
-            }
-        });
-        pinInputLayout.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                model.setFillState(CredentialsEditViewModel.INDEX_PIN, editable.length() > 0);
+                model.setFillState(index, editable.length() > 0);
             }
         });
     }

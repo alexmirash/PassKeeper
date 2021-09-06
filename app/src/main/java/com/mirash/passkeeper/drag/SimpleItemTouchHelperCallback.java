@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 public class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback {
     public static final float ALPHA_FULL = 1.0f;
     private final ItemTouchHelperAdapter adapter;
+    private ItemTouchStateCallback touchStateCallback;
 
     public SimpleItemTouchHelperCallback(ItemTouchHelperAdapter adapter) {
         this.adapter = adapter;
@@ -19,7 +20,7 @@ public class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback {
 
     @Override
     public boolean isLongPressDragEnabled() {
-        return true;
+        return false;
     }
 
     @Override
@@ -43,9 +44,7 @@ public class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback {
 
     @Override
     public boolean onMove(@NonNull RecyclerView recyclerView, RecyclerView.ViewHolder source, RecyclerView.ViewHolder target) {
-        if (source.getItemViewType() != target.getItemViewType()) {
-            return false;
-        }
+        if (source.getItemViewType() != target.getItemViewType()) return false;
         return adapter.onItemMove(source.getAdapterPosition(), target.getAdapterPosition());
     }
 
@@ -70,10 +69,11 @@ public class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback {
     public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
         // We only want the active item to change
         if (actionState != ItemTouchHelper.ACTION_STATE_IDLE) {
-            if (viewHolder instanceof ItemTouchHelperViewHolder) {
+            if (viewHolder instanceof ItemTouchStateCallback) {
                 // Let the view holder know that this item is being moved or dragged
-                ItemTouchHelperViewHolder itemViewHolder = (ItemTouchHelperViewHolder) viewHolder;
+                ItemTouchStateCallback itemViewHolder = (ItemTouchStateCallback) viewHolder;
                 itemViewHolder.onItemSelected();
+                if (touchStateCallback != null) touchStateCallback.onItemSelected();
             }
         }
         super.onSelectedChanged(viewHolder, actionState);
@@ -83,10 +83,15 @@ public class SimpleItemTouchHelperCallback extends ItemTouchHelper.Callback {
     public void clearView(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
         super.clearView(recyclerView, viewHolder);
         viewHolder.itemView.setAlpha(ALPHA_FULL);
-        if (viewHolder instanceof ItemTouchHelperViewHolder) {
+        if (viewHolder instanceof ItemTouchStateCallback) {
             // Tell the view holder it's time to restore the idle state
-            ItemTouchHelperViewHolder itemViewHolder = (ItemTouchHelperViewHolder) viewHolder;
+            ItemTouchStateCallback itemViewHolder = (ItemTouchStateCallback) viewHolder;
             itemViewHolder.onItemClear();
+            if (touchStateCallback != null) touchStateCallback.onItemClear();
         }
+    }
+
+    public void setTouchStateCallback(ItemTouchStateCallback touchStateCallback) {
+        this.touchStateCallback = touchStateCallback;
     }
 }

@@ -1,21 +1,21 @@
 package com.mirash.passkeeper.ui.main;
 
-import android.graphics.Color;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mirash.passkeeper.R;
-import com.mirash.passkeeper.drag.ItemTouchHelperViewHolder;
+import com.mirash.passkeeper.drag.ItemTouchStateCallback;
 
 
 /**
  * @author Mirash
  */
 
-class CredentialsItemHolder extends RecyclerView.ViewHolder implements ItemTouchHelperViewHolder {
+class CredentialsItemHolder extends RecyclerView.ViewHolder implements ItemTouchStateCallback {
     final View headerView;
     final TextView titleView;
     final TextView linkView;
@@ -45,7 +45,7 @@ class CredentialsItemHolder extends RecyclerView.ViewHolder implements ItemTouch
 
     @Override
     public void onItemSelected() {
-        itemView.setBackgroundColor(Color.LTGRAY);
+        itemView.setBackgroundColor(ContextCompat.getColor(itemView.getContext(), R.color.item_drag));
     }
 
     @Override

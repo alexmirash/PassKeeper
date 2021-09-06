@@ -3,7 +3,7 @@ package com.mirash.passkeeper.drag;
 /**
  * @author Mirash
  */
-public interface ItemTouchHelperViewHolder {
+public interface ItemTouchStateCallback {
     void onItemSelected();
 
     void onItemClear();
