@@ -91,4 +91,11 @@ public class CredentialsModel implements ICredentials {
                 ", details='" + details + '\'' +
                 '}';
     }
+
+    @Override
+    public boolean isAlike(String query) {
+        return title != null && title.toLowerCase().contains(query)
+                || link != null && link.toLowerCase().contains(query)
+                || login.toLowerCase().contains(query);
+    }
 }

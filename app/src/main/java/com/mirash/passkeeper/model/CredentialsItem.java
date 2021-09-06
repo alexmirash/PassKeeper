@@ -68,4 +68,9 @@ public class CredentialsItem implements ICredentials {
     public String toString() {
         return credentials.toString();
     }
+
+    @Override
+    public boolean isAlike(String query) {
+        return credentials.isAlike(query);
+    }
 }

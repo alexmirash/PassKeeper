@@ -7,12 +7,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mirash.passkeeper.R;
 import com.mirash.passkeeper.drag.ItemTouchHelperAdapter;
 import com.mirash.passkeeper.model.CredentialsItem;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -20,12 +22,16 @@ import java.util.List;
  * @author Mirash
  */
 
+@SuppressLint("NotifyDataSetChanged")
 public class CredentialsAdapter extends RecyclerView.Adapter<CredentialsItemHolder> implements ItemTouchHelperAdapter {
     private List<CredentialsItem> items;
+    private List<CredentialsItem> baseItems;
     private final CredentialsItemCallback callback;
+    private String filterQuery;
 
     public CredentialsAdapter(@NonNull List<CredentialsItem> items, CredentialsItemCallback callback) {
         this.items = items;
+        this.baseItems = items;
         this.callback = callback;
     }
 
@@ -96,8 +102,7 @@ public class CredentialsAdapter extends RecyclerView.Adapter<CredentialsItemHold
             }
         }
         holder.pinView.setText(pin);
-        int id = item.getId();
-        holder.editButton.setOnClickListener(view -> callback.onEditClick(id, position));
+        holder.editButton.setOnClickListener(view -> callback.onEditClick(item));
         holder.passwordVisibilityCheckBox.setOnCheckedChangeListener((compoundButton, checked) -> {
             items.get(position).setPasswordVisible(checked);
             notifyItemChanged(position, checked);
@@ -105,7 +110,7 @@ public class CredentialsAdapter extends RecyclerView.Adapter<CredentialsItemHold
         holder.shareButton.setOnClickListener(view -> callback.onShare(item));
         //drag
         holder.itemView.setOnLongClickListener(view -> {
-            callback.onDragStart(holder);
+            if (isFilterEmpty()) callback.onDragStart(holder);
             return false;
         });
     }
@@ -115,10 +120,18 @@ public class CredentialsAdapter extends RecyclerView.Adapter<CredentialsItemHold
         return items.size();
     }
 
-    @SuppressLint("NotifyDataSetChanged")
+    public int getBaseItemCount() {
+        return baseItems.size();
+    }
+
     public void setItems(List<CredentialsItem> credentials) {
-        items = credentials;
-        notifyDataSetChanged();
+        baseItems = credentials;
+        if (isFilterEmpty()) {
+            items = credentials;
+            notifyDataSetChanged();
+        } else {
+            filter();
+        }
     }
 
     @Override
@@ -137,5 +150,30 @@ public class CredentialsAdapter extends RecyclerView.Adapter<CredentialsItemHold
 
     public List<CredentialsItem> getItems() {
         return items;
+    }
+
+    public void setFilterQuery(@Nullable String query) {
+        filterQuery = query;
+        filter();
+    }
+
+    private boolean isFilterEmpty() {
+        return TextUtils.isEmpty(filterQuery);
+    }
+
+    private void filter() {
+        List<CredentialsItem> filteredItems;
+        if (isFilterEmpty()) {
+            filteredItems = baseItems;
+        } else {
+            filteredItems = new ArrayList<>(items.size());
+            for (CredentialsItem item : baseItems) {
+                if (item.isAlike(filterQuery)) {
+                    filteredItems.add(item);
+                }
+            }
+        }
+        items = filteredItems;
+        notifyDataSetChanged();
     }
 }

@@ -11,7 +11,7 @@ import java.util.List;
 public interface CredentialsItemCallback extends OnStartDragListener {
     void onLinkClick(String link);
 
-    void onEditClick(int id, int position);
+    void onEditClick(CredentialsItem item);
 
     void onOrderChanged(List<CredentialsItem> items);
 

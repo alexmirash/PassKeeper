@@ -9,7 +9,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
@@ -70,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements Observer<List<Cre
         model = new ViewModelProvider(this).get(MainActivityModel.class);
         model.getCredentialsModelLiveData().observe(this, this);
         addButton = findViewById(R.id.credentials_add_fab);
-        addButton.setOnClickListener(view -> showEditCredentialsScreen());
+        addButton.setOnClickListener(view -> showEditCredentialsScreen(null));
     }
 
     @Override
@@ -99,51 +98,37 @@ public class MainActivity extends AppCompatActivity implements Observer<List<Cre
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+        MenuItem searchMenuItem = menu.findItem(R.id.search);
+        SearchView searchView = (SearchView) searchMenuItem.getActionView();
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchView.setMaxWidth(Integer.MAX_VALUE);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                Log.d("LOL", "onQueryTextSubmit: " + query);
                 return false;
             }
 
             @Override
-            public boolean onQueryTextChange(String newText) {
-                Log.d("LOL", "onQueryTextChange: " + newText);
+            public boolean onQueryTextChange(String query) {
+                adapter.setFilterQuery(query.toLowerCase());
                 return false;
             }
         });
-        searchView.setOnSearchClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d("LOL", "onSearchClick");
-            }
-        });
-        menu.findItem(R.id.search).setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+        searchMenuItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
             @Override
             public boolean onMenuItemActionExpand(MenuItem item) {
-                Log.d("LOL", "onMenuItemActionExpand");
+                addButton.hide();
                 return true;
             }
 
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
-                Log.d("LOL", "onMenuItemActionCollapse");
+                addButton.show();
+                adapter.setFilterQuery(null);
                 return true;
             }
         });
         return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.search) {
-            Log.d("LOL" ,"onOptionsItemSelected");
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -172,8 +157,8 @@ public class MainActivity extends AppCompatActivity implements Observer<List<Cre
     }
 
     @Override
-    public void onEditClick(int id, int position) {
-        showEditCredentialsScreen(id, position);
+    public void onEditClick(CredentialsItem item) {
+        showEditCredentialsScreen(item);
     }
 
     @Override
@@ -186,14 +171,14 @@ public class MainActivity extends AppCompatActivity implements Observer<List<Cre
         Utils.share(this, Utils.fromCredentials(item));
     }
 
-    private void showEditCredentialsScreen() {
-        showEditCredentialsScreen(null, adapter.getItemCount());
-    }
-
-    private void showEditCredentialsScreen(Integer id, int position) {
+    private void showEditCredentialsScreen(@Nullable CredentialsItem item) {
         Intent intent = new Intent(this, CredentialsEditActivity.class);
-        if (id != null) intent.putExtra(Const.KEY_ID, id);
-        intent.putExtra(Const.KEY_POSITION, position);
+        if (item != null) {
+            intent.putExtra(Const.KEY_ID, item.getId());
+            intent.putExtra(Const.KEY_POSITION, item.getPosition());
+        } else {
+            intent.putExtra(Const.KEY_POSITION, adapter.getBaseItemCount());
+        }
         startActivityForResult(intent, Const.REQUEST_CODE_EDIT);
     }
 

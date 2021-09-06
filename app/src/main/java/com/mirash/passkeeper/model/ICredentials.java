@@ -1,9 +1,11 @@
 package com.mirash.passkeeper.model;
 
+import com.mirash.passkeeper.ui.main.Filterable;
+
 /**
  * @author Mirash
  */
-public interface ICredentials {
+public interface ICredentials extends Filterable {
     String getTitle();
 
     String getLink();
