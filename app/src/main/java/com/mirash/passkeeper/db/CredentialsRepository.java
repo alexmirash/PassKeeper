@@ -2,9 +2,6 @@ package com.mirash.passkeeper.db;
 
 import androidx.lifecycle.LiveData;
 
-import com.mirash.passkeeper.db.Credentials;
-import com.mirash.passkeeper.db.CredentialsDao;
-
 import java.util.List;
 
 /**
@@ -12,9 +9,11 @@ import java.util.List;
  */
 public class CredentialsRepository {
     private final CredentialsDao dao;
+    private final CredentialsDatabase database;
 
-    public CredentialsRepository(CredentialsDao dao) {
-        this.dao = dao;
+    public CredentialsRepository(CredentialsDatabase database) {
+        this.database = database;
+        this.dao = database.getCredentialsDao();
     }
 
     public void insertAll(List<Credentials> credentialsList) {
@@ -71,5 +70,9 @@ public class CredentialsRepository {
 
     public Credentials getEntryByNameSync(String name) {
         return dao.getByTitleSync(name);
+    }
+
+    public void nuke() {
+        new Thread(database::clearAllTables).start();
     }
 }

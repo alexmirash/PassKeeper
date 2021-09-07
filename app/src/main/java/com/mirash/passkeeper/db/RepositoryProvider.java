@@ -17,7 +17,7 @@ public class RepositoryProvider {
 
     public CredentialsRepository getCredentialsRepository(Application app) {
         if (credentialsRepository == null) {
-            credentialsRepository = new CredentialsRepository(CredentialsDatabase.getDatabase(app).getCredentialsDao());
+            credentialsRepository = new CredentialsRepository(CredentialsDatabase.getDatabase(app));
         }
         return credentialsRepository;
     }

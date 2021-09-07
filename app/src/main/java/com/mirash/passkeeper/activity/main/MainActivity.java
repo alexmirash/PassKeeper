@@ -87,6 +87,11 @@ public class MainActivity extends AppCompatActivity implements Observer<List<Cre
     }
 
     @Override
+    public void onBackPressed() {
+        finishAndRemoveTask();
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == Const.REQUEST_CODE_EDIT) {

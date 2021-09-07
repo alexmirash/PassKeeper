@@ -16,6 +16,7 @@ import androidx.annotation.Nullable;
 import com.google.android.material.textfield.TextInputLayout;
 import com.mirash.passkeeper.PassKeeperApp;
 import com.mirash.passkeeper.R;
+import com.mirash.passkeeper.db.RepositoryProvider;
 import com.mirash.passkeeper.model.ICredentials;
 
 /**
@@ -100,5 +101,9 @@ public final class Utils {
             builder.append(item).append("\n");
         }
         return builder.toString();
+    }
+
+    public static void nukeData() {
+        RepositoryProvider.getCredentialsRepository().nuke();
     }
 }
