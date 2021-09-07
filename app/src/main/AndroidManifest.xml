@@ -21,20 +21,24 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PassKeeper">
         <activity
-            android:name=".activity.MainActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            android:name=".activity.main.MainActivity"
+            android:exported="false">
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
         </activity>
         <activity
-            android:name=".activity.CredentialsEditActivity"
+            android:name=".activity.edit.CredentialsEditActivity"
             android:exported="false" />
+        <activity
+            android:theme="@style/Theme.Fullscreen"
+            android:name=".activity.pin.PinActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

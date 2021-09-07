@@ -1,4 +1,4 @@
-package com.mirash.passkeeper.ui.main;
+package com.mirash.passkeeper.activity.edit;
 
 import android.annotation.SuppressLint;
 import android.text.TextUtils;
@@ -11,7 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mirash.passkeeper.R;
-import com.mirash.passkeeper.drag.ItemTouchHelperAdapter;
+import com.mirash.passkeeper.motion.ItemTouchHelperAdapter;
 import com.mirash.passkeeper.model.CredentialsItem;
 
 import java.util.ArrayList;

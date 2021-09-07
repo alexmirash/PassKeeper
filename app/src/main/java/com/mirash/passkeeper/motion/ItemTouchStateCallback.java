@@ -1,4 +1,4 @@
-package com.mirash.passkeeper.drag;
+package com.mirash.passkeeper.motion;
 
 /**
  * @author Mirash

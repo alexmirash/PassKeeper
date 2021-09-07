@@ -1,6 +1,4 @@
-package com.mirash.passkeeper.db.tool;
-
-import com.mirash.passkeeper.db.Credentials;
+package com.mirash.passkeeper.db;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,17 +13,27 @@ public class DbUtils {
     public static List<Credentials> getTestPredefinedCredentials() {
         List<Credentials> list = new ArrayList<>();
         Random r = new Random();
-        int count = 10;
+        int count = 1000;
         for (int i = 0; i < count; i++) {
             Credentials credentials = new Credentials();
             credentials.setTitle("Test_title_" + i);
             credentials.setLogin("test_login_" + i);
-            credentials.setPassword("test_password_" + i);
             if (r.nextBoolean()) {
                 credentials.setLink("test_link_" + i);
             }
             if (r.nextBoolean()) {
                 credentials.setDetails("test_details_" + i);
+            }
+            float value = r.nextFloat();
+            if (value > 0.7) {
+                credentials.setPassword("test_password_" + i);
+                credentials.setPin("text_pin" + i);
+            } else {
+                if (value > 0.35) {
+                    credentials.setPassword("test_password_" + i);
+                } else {
+                    credentials.setPin("text_pin" + i);
+                }
             }
             list.add(credentials);
         }

@@ -1,6 +1,6 @@
 package com.mirash.passkeeper.model;
 
-import com.mirash.passkeeper.ui.main.Filterable;
+import com.mirash.passkeeper.tool.listener.Filterable;
 
 /**
  * @author Mirash

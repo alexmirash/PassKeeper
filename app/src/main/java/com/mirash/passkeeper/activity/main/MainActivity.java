@@ -1,4 +1,4 @@
-package com.mirash.passkeeper.activity;
+package com.mirash.passkeeper.activity.main;
 
 import android.app.SearchManager;
 import android.content.Context;
@@ -23,17 +23,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mirash.passkeeper.Const;
 import com.mirash.passkeeper.R;
+import com.mirash.passkeeper.activity.edit.CredentialsEditActivity;
 import com.mirash.passkeeper.db.Credentials;
-import com.mirash.passkeeper.drag.ItemTouchStateCallback;
-import com.mirash.passkeeper.drag.OnStartDragListener;
-import com.mirash.passkeeper.drag.SimpleItemTouchHelperCallback;
+import com.mirash.passkeeper.motion.ItemTouchStateCallback;
+import com.mirash.passkeeper.motion.OnStartDragListener;
+import com.mirash.passkeeper.motion.SimpleItemTouchHelperCallback;
 import com.mirash.passkeeper.model.CredentialsItem;
 import com.mirash.passkeeper.tool.EditResultAction;
 import com.mirash.passkeeper.tool.Utils;
 import com.mirash.passkeeper.tool.decoration.DividerListItemDecoration;
 import com.mirash.passkeeper.tool.decoration.VerticalBottomSpaceItemDecoration;
-import com.mirash.passkeeper.ui.main.CredentialsAdapter;
-import com.mirash.passkeeper.ui.main.CredentialsItemCallback;
+import com.mirash.passkeeper.activity.edit.CredentialsAdapter;
+import com.mirash.passkeeper.activity.edit.CredentialsItemCallback;
 
 import java.util.ArrayList;
 import java.util.List;

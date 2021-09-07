@@ -1,6 +1,6 @@
 package com.mirash.passkeeper.db;
 
-import static com.mirash.passkeeper.db.tool.DbUtils.LOG_TAG;
+import static com.mirash.passkeeper.db.DbUtils.LOG_TAG;
 
 import android.app.Application;
 import android.util.Log;
@@ -11,9 +11,6 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
-
-import com.mirash.passkeeper.db.repository.RepositoryProvider;
-import com.mirash.passkeeper.db.tool.DbUtils;
 
 import java.util.concurrent.Executors;
 

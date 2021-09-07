@@ -1,4 +1,4 @@
-package com.mirash.passkeeper.db.repository;
+package com.mirash.passkeeper.db;
 
 import androidx.lifecycle.LiveData;
 

@@ -1,4 +1,4 @@
-package com.mirash.passkeeper.activity;
+package com.mirash.passkeeper.activity.edit;
 
 import android.app.Application;
 
@@ -10,7 +10,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
 import com.mirash.passkeeper.db.Credentials;
-import com.mirash.passkeeper.db.repository.RepositoryProvider;
+import com.mirash.passkeeper.db.RepositoryProvider;
 import com.mirash.passkeeper.model.CredentialsModel;
 import com.mirash.passkeeper.model.ICredentials;
 

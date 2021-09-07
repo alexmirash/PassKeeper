@@ -1,6 +1,6 @@
-package com.mirash.passkeeper.ui.main;
+package com.mirash.passkeeper.activity.edit;
 
-import com.mirash.passkeeper.drag.OnStartDragListener;
+import com.mirash.passkeeper.motion.OnStartDragListener;
 import com.mirash.passkeeper.model.CredentialsItem;
 
 import java.util.List;

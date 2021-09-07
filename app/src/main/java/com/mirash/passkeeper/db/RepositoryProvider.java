@@ -1,9 +1,8 @@
-package com.mirash.passkeeper.db.repository;
+package com.mirash.passkeeper.db;
 
 import android.app.Application;
 
 import com.mirash.passkeeper.PassKeeperApp;
-import com.mirash.passkeeper.db.CredentialsDatabase;
 
 /**
  * @author Mirash

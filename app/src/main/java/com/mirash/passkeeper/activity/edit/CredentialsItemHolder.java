@@ -1,4 +1,4 @@
-package com.mirash.passkeeper.ui.main;
+package com.mirash.passkeeper.activity.edit;
 
 import android.view.View;
 import android.widget.CheckBox;
@@ -8,7 +8,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mirash.passkeeper.R;
-import com.mirash.passkeeper.drag.ItemTouchStateCallback;
+import com.mirash.passkeeper.motion.ItemTouchStateCallback;
 
 
 /**
@@ -28,7 +28,6 @@ class CredentialsItemHolder extends RecyclerView.ViewHolder implements ItemTouch
     final View editButton;
     final View shareButton;
     final CheckBox passwordVisibilityCheckBox;
-    final TextView details = null;
 
 
     CredentialsItemHolder(View itemView) {

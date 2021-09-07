@@ -1,4 +1,4 @@
-package com.mirash.passkeeper.activity;
+package com.mirash.passkeeper.activity.edit;
 
 import android.content.Intent;
 import android.os.Bundle;
