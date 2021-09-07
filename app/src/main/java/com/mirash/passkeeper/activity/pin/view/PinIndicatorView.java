@@ -1,4 +1,4 @@
-package com.mirash.passkeeper.activity.pin;
+package com.mirash.passkeeper.activity.pin.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -12,7 +12,6 @@ import com.mirash.passkeeper.Const;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 /**
  * @author Mirash

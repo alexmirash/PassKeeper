@@ -1,4 +1,4 @@
-package com.mirash.passkeeper.activity.pin;
+package com.mirash.passkeeper.activity.pin.view;
 
 import android.animation.ObjectAnimator;
 import android.content.Context;

@@ -7,6 +7,7 @@ import android.util.Log;
 import androidx.security.crypto.EncryptedSharedPreferences;
 import androidx.security.crypto.MasterKeys;
 
+import com.mirash.passkeeper.Const;
 import com.mirash.passkeeper.PassKeeperApp;
 
 import java.io.IOException;
@@ -47,5 +48,13 @@ public class EncryptedAppPreferences extends BasePreferences {
             instance = new EncryptedAppPreferences(PassKeeperApp.getInstance().getApplicationContext());
         }
         return instance;
+    }
+
+    public void setPinCode(String value) {
+        putString(Const.KEY_PIN_CODE, value);
+    }
+
+    public String getPinCode() {
+        return getString(Const.KEY_PIN_CODE, null);
     }
 }

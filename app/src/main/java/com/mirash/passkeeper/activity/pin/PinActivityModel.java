@@ -18,14 +18,14 @@ import java.util.Stack;
  */
 public class PinActivityModel extends AndroidViewModel implements PinInputView.PinCallback {
     private final MutableLiveData<Integer> pinCodeSizeLiveData;
-    private final MutableLiveData<Boolean> pinCodeCorrectLiveData;
+    private final MutableLiveData<String> pinCodeCheckLiveData;
     private final Stack<Integer> pinCode;
 
     public PinActivityModel(@NonNull Application application) {
         super(application);
         pinCode = new Stack<>();
         pinCodeSizeLiveData = new MutableLiveData<>(0);
-        pinCodeCorrectLiveData = new MutableLiveData<>(false);
+        pinCodeCheckLiveData = new MutableLiveData<>(null);
     }
 
     @Override
@@ -52,8 +52,8 @@ public class PinActivityModel extends AndroidViewModel implements PinInputView.P
         return pinCodeSizeLiveData;
     }
 
-    public MutableLiveData<Boolean> getPinCodeCorrectLiveData() {
-        return pinCodeCorrectLiveData;
+    public MutableLiveData<String> getPinCodeCheckLiveData() {
+        return pinCodeCheckLiveData;
     }
 
     private void checkPinCode() {
@@ -62,10 +62,7 @@ public class PinActivityModel extends AndroidViewModel implements PinInputView.P
             builder.append(digit);
         }
         String pinCode = builder.toString();
-        if (pinCode.equals("123456")) {
-            Log.d("LOL", "congrats, pin is correct");
-            pinCodeCorrectLiveData.setValue(true);
-        }
+        pinCodeCheckLiveData.setValue(pinCode);
         log("checkPinCode " + pinCode);
     }
 

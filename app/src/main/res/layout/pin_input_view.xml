@@ -10,7 +10,7 @@
         >
         <com.mirash.passkeeper.view.PinMaterialButton
             android:id="@+id/pin_button_1"
-            style="@style/PinButtonStyle"
+            style="@style/PinButton"
             android:text="1"
             />
         <Space
@@ -19,7 +19,7 @@
             />
         <com.mirash.passkeeper.view.PinMaterialButton
             android:id="@+id/pin_button_2"
-            style="@style/PinButtonStyle"
+            style="@style/PinButton"
             android:text="2"
             />
         <Space
@@ -28,7 +28,7 @@
             />
         <com.mirash.passkeeper.view.PinMaterialButton
             android:id="@+id/pin_button_3"
-            style="@style/PinButtonStyle"
+            style="@style/PinButton"
             android:text="3"
             />
     </LinearLayout>
@@ -40,7 +40,7 @@
         >
         <com.mirash.passkeeper.view.PinMaterialButton
             android:id="@+id/pin_button_4"
-            style="@style/PinButtonStyle"
+            style="@style/PinButton"
             android:text="4"
             />
         <Space
@@ -49,7 +49,7 @@
             />
         <com.mirash.passkeeper.view.PinMaterialButton
             android:id="@+id/pin_button_5"
-            style="@style/PinButtonStyle"
+            style="@style/PinButton"
             android:text="5"
             />
         <Space
@@ -58,7 +58,7 @@
             />
         <com.mirash.passkeeper.view.PinMaterialButton
             android:id="@+id/pin_button_6"
-            style="@style/PinButtonStyle"
+            style="@style/PinButton"
             android:text="6"
             />
     </LinearLayout>
@@ -70,7 +70,7 @@
         >
         <com.mirash.passkeeper.view.PinMaterialButton
             android:id="@+id/pin_button_7"
-            style="@style/PinButtonStyle"
+            style="@style/PinButton"
             android:text="7"
             />
         <Space
@@ -79,7 +79,7 @@
             />
         <com.mirash.passkeeper.view.PinMaterialButton
             android:id="@+id/pin_button_8"
-            style="@style/PinButtonStyle"
+            style="@style/PinButton"
             android:text="8"
             />
         <Space
@@ -88,7 +88,7 @@
             />
         <com.mirash.passkeeper.view.PinMaterialButton
             android:id="@+id/pin_button_9"
-            style="@style/PinButtonStyle"
+            style="@style/PinButton"
             android:text="9"
             />
     </LinearLayout>
@@ -109,7 +109,7 @@
             />
         <com.mirash.passkeeper.view.PinMaterialButton
             android:id="@+id/pin_button_0"
-            style="@style/PinButtonStyle"
+            style="@style/PinButton"
             android:text="0"
             />
         <Space
@@ -118,7 +118,7 @@
             />
         <com.mirash.passkeeper.view.PinMaterialButton
             android:id="@+id/pin_button_backspace"
-            style="@style/PinButtonStyle"
+            style="@style/PinButton"
             app:icon="@drawable/ic_baseline_backspace_24"
             app:iconGravity="textStart"
             app:iconPadding="0dp"

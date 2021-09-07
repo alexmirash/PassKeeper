@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.google.android.material.textfield.TextInputLayout;
+import com.mirash.passkeeper.Const;
 import com.mirash.passkeeper.PassKeeperApp;
 import com.mirash.passkeeper.R;
 import com.mirash.passkeeper.db.RepositoryProvider;
@@ -101,6 +102,10 @@ public final class Utils {
             builder.append(item).append("\n");
         }
         return builder.toString();
+    }
+
+    public static boolean isPinCodeActual(String pinCode){
+        return pinCode != null && pinCode.length() == Const.PIN_CODE_SIZE;
     }
 
     public static void nukeData() {

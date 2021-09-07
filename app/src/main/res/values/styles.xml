@@ -1,18 +1,18 @@
 <resources>
 
-    <style name="TextInputLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+    <style name="TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">match_parent</item>
     </style>
 
-    <style name="NameInputTextStyle">
+    <style name="NameInputText">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">@dimen/text_size_default</item>
         <item name="android:imeOptions">actionDone</item>
     </style>
 
-    <style name="PinButtonStyle" parent="Widget.MaterialComponents.Button.TextButton">
+    <style name="PinButton" parent="Widget.MaterialComponents.Button.TextButton">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_weight">1</item>
@@ -22,5 +22,18 @@
         <item name="android:insetLeft">0dp</item>
         <item name="android:insetRight">0dp</item>
     </style>
+
+    <style name="TextButton" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">52dp</item>
+        <item name="android:minWidth">140dp</item>
+        <item name="android:textSize">@dimen/text_size_medium</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:insetLeft">0dp</item>
+        <item name="android:insetRight">0dp</item>
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+
 
 </resources>
