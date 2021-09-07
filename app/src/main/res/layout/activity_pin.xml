@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:paddingHorizontal="32dp"
     android:paddingBottom="@dimen/large_padding"
-    tools:context=".activity.pin.PinActivity"
+    tools:context=".activity.pin.PinCodeActivity"
     >
     <com.mirash.passkeeper.activity.pin.PinIndicatorView
         android:id="@+id/pin_indicator"

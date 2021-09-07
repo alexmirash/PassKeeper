@@ -4,6 +4,8 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -22,19 +24,21 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mirash.passkeeper.Const;
+import com.mirash.passkeeper.PassKeeperApp;
 import com.mirash.passkeeper.R;
+import com.mirash.passkeeper.activity.edit.CredentialsAdapter;
 import com.mirash.passkeeper.activity.edit.CredentialsEditActivity;
+import com.mirash.passkeeper.activity.edit.CredentialsItemCallback;
 import com.mirash.passkeeper.db.Credentials;
+import com.mirash.passkeeper.model.CredentialsItem;
 import com.mirash.passkeeper.motion.ItemTouchStateCallback;
 import com.mirash.passkeeper.motion.OnStartDragListener;
 import com.mirash.passkeeper.motion.SimpleItemTouchHelperCallback;
-import com.mirash.passkeeper.model.CredentialsItem;
 import com.mirash.passkeeper.tool.EditResultAction;
 import com.mirash.passkeeper.tool.Utils;
 import com.mirash.passkeeper.tool.decoration.DividerListItemDecoration;
 import com.mirash.passkeeper.tool.decoration.VerticalBottomSpaceItemDecoration;
-import com.mirash.passkeeper.activity.edit.CredentialsAdapter;
-import com.mirash.passkeeper.activity.edit.CredentialsItemCallback;
+import com.mirash.passkeeper.tool.listener.AppShowObserver;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,13 +47,14 @@ import java.util.List;
  * @author Mirash
  */
 public class MainActivity extends AppCompatActivity implements Observer<List<Credentials>>,
-        CredentialsItemCallback, OnStartDragListener, ItemTouchStateCallback {
+        CredentialsItemCallback, OnStartDragListener, ItemTouchStateCallback, Runnable, AppShowObserver {
 
     private MainActivityModel model;
     private RecyclerView credentialsRecycler;
     private CredentialsAdapter adapter;
     private FloatingActionButton addButton;
     private ItemTouchHelper itemTouchHelper;
+    private final Handler handler = new Handler(Looper.getMainLooper());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,12 +76,14 @@ public class MainActivity extends AppCompatActivity implements Observer<List<Cre
         model.getCredentialsModelLiveData().observe(this, this);
         addButton = findViewById(R.id.credentials_add_fab);
         addButton.setOnClickListener(view -> showEditCredentialsScreen(null));
+        PassKeeperApp.getInstance().addAppShowObserver(this);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         model.getCredentialsModelLiveData().removeObserver(this);
+        PassKeeperApp.getInstance().removeAppShowObserver(this);
     }
 
     @Override
@@ -196,5 +203,21 @@ public class MainActivity extends AppCompatActivity implements Observer<List<Cre
     @Override
     public void onItemClear() {
         model.handleOrderChanged(adapter.getItems());
+    }
+
+    @Override
+    public void run() {
+        Log.d("LOL", "finish after " + (Const.BACKGROUND_INACTIVITY_TIME / 1000) + "sec");
+        finishAndRemoveTask();
+    }
+
+    @Override
+    public void onWentToBackground() {
+        handler.postDelayed(this, Const.BACKGROUND_INACTIVITY_TIME);
+    }
+
+    @Override
+    public void onWentToForeground() {
+        handler.removeCallbacks(this);
     }
 }

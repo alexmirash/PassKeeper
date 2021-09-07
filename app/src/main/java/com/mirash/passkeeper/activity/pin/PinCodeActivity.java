@@ -13,7 +13,7 @@ import com.mirash.passkeeper.view.PinInputView;
 /**
  * @author Mirash
  */
-public class PinActivity extends AppCompatActivity {
+public class PinCodeActivity extends AppCompatActivity {
 
     private PinInputView inputView;
     private PinIndicatorView indicatorView;
