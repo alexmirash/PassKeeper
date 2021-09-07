@@ -34,7 +34,6 @@ public class PinCodeEnterCurrentActivity extends PinCodeBaseActivity {
         if (pinCode == null || pinCode.length() != Const.PIN_CODE_SIZE) return;
         String actualPinCode = EncryptedAppPreferences.getInstance().getPinCode();
         if (Objects.equals(actualPinCode, pinCode)) {
-            EncryptedAppPreferences.getInstance().setPinCode(null);
             finish();
             Intent intent = new Intent(PinCodeEnterCurrentActivity.this, PinCodeCreateActivity.class);
             startActivity(intent);

@@ -6,6 +6,8 @@ import android.view.View;
 
 import com.mirash.passkeeper.Const;
 import com.mirash.passkeeper.R;
+import com.mirash.passkeeper.preferences.EncryptedAppPreferences;
+import com.mirash.passkeeper.tool.Utils;
 
 /**
  * @author Mirash
@@ -44,5 +46,16 @@ public class PinCodeCreateActivity extends PinCodeBaseActivity {
             intent.putExtra(Const.KEY_PIN_CODE, pinCode);
             startActivity(intent);
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (Utils.isPinCodeActual(EncryptedAppPreferences.getInstance().getPinCode())) {
+            finish();
+            Intent intent = new Intent(PinCodeCreateActivity.this, PinCodeEnterActivity.class);
+            startActivity(intent);
+        } else {
+            onBackPressed();
+        }
     }
 }

@@ -8,6 +8,7 @@ import com.mirash.passkeeper.Const;
 import com.mirash.passkeeper.R;
 import com.mirash.passkeeper.activity.main.MainActivity;
 import com.mirash.passkeeper.preferences.EncryptedAppPreferences;
+import com.mirash.passkeeper.tool.Utils;
 
 import java.util.Objects;
 
@@ -41,6 +42,17 @@ public class PinCodeConfirmActivity extends PinCodeBaseActivity {
             finish();
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (Utils.isPinCodeActual(EncryptedAppPreferences.getInstance().getPinCode())) {
+            finish();
+            Intent intent = new Intent(PinCodeConfirmActivity.this, PinCodeEnterActivity.class);
+            startActivity(intent);
+        } else {
+            onBackPressed();
         }
     }
 }
