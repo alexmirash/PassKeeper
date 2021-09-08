@@ -1,6 +1,5 @@
 package com.mirash.passkeeper.activity.pin;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -34,16 +33,12 @@ public class PinCodeEnterCurrentActivity extends PinCodeBaseActivity {
         if (pinCode == null || pinCode.length() != Const.PIN_CODE_SIZE) return;
         String actualPinCode = EncryptedAppPreferences.getInstance().getPinCode();
         if (Objects.equals(actualPinCode, pinCode)) {
-            finish();
-            Intent intent = new Intent(PinCodeEnterCurrentActivity.this, PinCodeCreateActivity.class);
-            startActivity(intent);
+            startNewActivity(PinCodeCreateActivity.class);
         }
     }
 
     @Override
     public void onBackPressed() {
-        finish();
-        Intent intent = new Intent(PinCodeEnterCurrentActivity.this, PinCodeEnterActivity.class);
-        startActivity(intent);
+        startNewActivity(PinCodeEnterActivity.class);
     }
 }

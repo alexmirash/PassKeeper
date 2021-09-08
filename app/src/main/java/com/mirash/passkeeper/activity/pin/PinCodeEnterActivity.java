@@ -1,6 +1,5 @@
 package com.mirash.passkeeper.activity.pin;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -22,11 +21,7 @@ public class PinCodeEnterActivity extends PinCodeBaseActivity {
         buttonBottomStart.setVisibility(View.VISIBLE);
         buttonBottomEnd.setVisibility(View.GONE);
         buttonBottomStart.setText(getString(R.string.pin_code_change));
-        buttonBottomStart.setOnClickListener(view -> {
-            finish();
-            Intent intent = new Intent(PinCodeEnterActivity.this, PinCodeEnterCurrentActivity.class);
-            startActivity(intent);
-        });
+        buttonBottomStart.setOnClickListener(view -> startNewActivity(PinCodeEnterCurrentActivity.class));
     }
 
     @Override
@@ -39,9 +34,7 @@ public class PinCodeEnterActivity extends PinCodeBaseActivity {
         if (pinCode == null || pinCode.length() != Const.PIN_CODE_SIZE) return;
         String actualPinCode = EncryptedAppPreferences.getInstance().getPinCode();
         if (Objects.equals(actualPinCode, pinCode)) {
-            finish();
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
+            startNewActivity(MainActivity.class);
         }
     }
 }

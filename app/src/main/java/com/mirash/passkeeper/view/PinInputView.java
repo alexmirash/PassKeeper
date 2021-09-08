@@ -17,7 +17,7 @@ import java.util.List;
  */
 public class PinInputView extends LinearLayout {
     private List<TextView> buttons;
-    private TextView buttonBackspaces;
+    private TextView buttonBackspace;
     private PinCallback callback;
 
     public PinInputView(Context context) {
@@ -55,8 +55,8 @@ public class PinInputView extends LinearLayout {
         for (int i = 0; i < buttonIds.length; i++) {
             initInputButton(buttonIds[i], i);
         }
-        buttonBackspaces = findViewById(R.id.pin_button_backspace);
-        buttonBackspaces.setOnClickListener(view -> {
+        buttonBackspace = findViewById(R.id.pin_button_backspace);
+        buttonBackspace.setOnClickListener(view -> {
             if (callback != null) callback.onBackspaceClick();
         });
     }

@@ -1,5 +1,6 @@
 package com.mirash.passkeeper.activity.pin;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 
@@ -19,6 +20,7 @@ public abstract class PinCodeBaseActivity extends AppCompatActivity {
 
     protected PinIndicatorView indicatorView;
     protected TextView pinCodeMessageView;
+    protected TextView pinCodeDetailsView;
     protected TextView buttonBottomStart;
     protected TextView buttonBottomEnd;
     protected PinActivityModel viewModel;
@@ -29,6 +31,7 @@ public abstract class PinCodeBaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pin);
         pinCodeMessageView = findViewById(R.id.pin_code_message);
+        pinCodeDetailsView = findViewById(R.id.pin_code_details);
         indicatorView = findViewById(R.id.pin_indicator);
         buttonBottomStart = findViewById(R.id.pin_button_bottom_start);
         buttonBottomEnd = findViewById(R.id.pin_button_bottom_end);
@@ -47,8 +50,15 @@ public abstract class PinCodeBaseActivity extends AppCompatActivity {
         indicatorView.setCheckedSize(size);
     }
 
-    protected abstract @StringRes
-    int getMessageRes();
+    @StringRes
+    protected abstract int getMessageRes();
 
     protected abstract void checkPinCode(String pinCode);
+
+    protected void startNewActivity(Class<?> activityClass) {
+        finish();
+        Intent intent = new Intent(this, activityClass);
+        startActivity(intent);
+//        overridePendingTransition(0 ,0);
+    }
 }

@@ -104,7 +104,7 @@ public final class Utils {
         return builder.toString();
     }
 
-    public static boolean isPinCodeActual(String pinCode){
+    public static boolean isPinCodeActual(String pinCode) {
         return pinCode != null && pinCode.length() == Const.PIN_CODE_SIZE;
     }
 

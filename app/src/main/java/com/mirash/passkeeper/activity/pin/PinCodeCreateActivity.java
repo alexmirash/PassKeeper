@@ -51,9 +51,7 @@ public class PinCodeCreateActivity extends PinCodeBaseActivity {
     @Override
     public void onBackPressed() {
         if (Utils.isPinCodeActual(EncryptedAppPreferences.getInstance().getPinCode())) {
-            finish();
-            Intent intent = new Intent(PinCodeCreateActivity.this, PinCodeEnterActivity.class);
-            startActivity(intent);
+            startNewActivity(PinCodeEnterActivity.class);
         } else {
             onBackPressed();
         }

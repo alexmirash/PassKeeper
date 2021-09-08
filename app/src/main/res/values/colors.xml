@@ -12,5 +12,7 @@
     <color name="color_accent">#43a6bf</color>
     <color name="list_divider">#551C6F84</color>
     <color name="item_drag">#331C6F84</color>
-    <color name="text_color_dimmed">#7F0b4959</color>
+    <color name="text_color_details">#7F0b4959</color>
+    <color name="text_color_disabled">#26000000</color>
+    <color name="text_color_error">@android:color/holo_red_dark</color>
 </resources>
