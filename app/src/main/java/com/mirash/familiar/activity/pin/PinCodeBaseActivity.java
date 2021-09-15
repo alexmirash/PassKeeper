@@ -59,6 +59,5 @@ public abstract class PinCodeBaseActivity extends AppCompatActivity {
         finish();
         Intent intent = new Intent(this, activityClass);
         startActivity(intent);
-//        overridePendingTransition(0 ,0);
     }
 }

@@ -199,6 +199,7 @@ public class MainActivity extends AppCompatActivity implements Observer<List<Cre
 
     private void showEditCredentialsScreen(@Nullable CredentialsItem item) {
         Intent intent = new Intent(this, CredentialsEditActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         if (item != null) {
             intent.putExtra(Const.KEY_ID, item.getId());
             intent.putExtra(Const.KEY_POSITION, item.getPosition());

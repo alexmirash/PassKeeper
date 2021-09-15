@@ -30,7 +30,7 @@ public class EncryptedAppPreferences extends BasePreferences {
         try {
             String masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC);
             sharedPreferences = EncryptedSharedPreferences.create(
-                    "pass_keeper_prefs",
+                    "familiar_prefs",
                     masterKeyAlias,
                     context,
                     EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
