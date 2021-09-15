@@ -98,10 +98,13 @@
         android:orientation="horizontal"
         android:weightSum="3"
         >
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+        <com.mirash.passkeeper.view.PinMaterialButton
+            android:id="@+id/pin_button_bio"
+            style="@style/PinButton"
+            android:visibility="invisible"
+            app:icon="@drawable/ic_cat_footprint_24"
+            app:iconGravity="textStart"
+            app:iconPadding="0dp"
             />
         <Space
             android:layout_width="@dimen/pin_input_button_horizontal_space"

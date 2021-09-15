@@ -9,7 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
-import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import java.util.concurrent.Executors;
@@ -17,7 +16,7 @@ import java.util.concurrent.Executors;
 /**
  * @author Mirash
  */
-@Database(entities = {Credentials.class}, version = 3, exportSchema = false)
+@Database(entities = {Credentials.class}, version = 1, exportSchema = false)
 public abstract class CredentialsDatabase extends RoomDatabase {
     private static final String NAME = "CredentialsDb";
 
@@ -39,17 +38,6 @@ public abstract class CredentialsDatabase extends RoomDatabase {
         return Room.databaseBuilder(application.getApplicationContext(), CredentialsDatabase.class, NAME)
                 .fallbackToDestructiveMigration()
                 .addCallback(roomDbCallback)
-                .addMigrations(getMigration2_3())
                 .build();
-    }
-
-    private static Migration getMigration2_3() {
-        return new Migration(2, 3) {
-            @Override
-            public void migrate(@NonNull SupportSQLiteDatabase database) {
-                Log.d(LOG_TAG, "migrate 2 -> 3");
-                database.execSQL("ALTER TABLE Credentials ADD COLUMN position INTEGER DEFAULT 0 NOT NULL");
-            }
-        };
     }
 }

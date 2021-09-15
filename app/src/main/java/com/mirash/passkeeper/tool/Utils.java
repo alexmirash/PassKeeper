@@ -17,7 +17,6 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.mirash.passkeeper.Const;
 import com.mirash.passkeeper.PassKeeperApp;
 import com.mirash.passkeeper.R;
-import com.mirash.passkeeper.db.RepositoryProvider;
 import com.mirash.passkeeper.model.ICredentials;
 
 /**
@@ -80,35 +79,40 @@ public final class Utils {
     public static String fromCredentials(ICredentials credentials) {
         Resources res = PassKeeperApp.getRes();
         StringBuilder builder = new StringBuilder();
+        //title
         String item = credentials.getTitle();
-        if (!TextUtils.isEmpty(item)) {
-            builder.append(item).append("\n");
-        }
+        if (!TextUtils.isEmpty(item)) builder.append(item);
+        //link
         item = credentials.getLink();
         if (!TextUtils.isEmpty(item)) {
-            builder.append(item).append("\n");
+            if (builder.length() != 0) builder.append("\n");
+            builder.append(item);
         }
-        builder.append(res.getString(R.string.login)).append(":").append(credentials.getLogin()).append("\n");
+        //login
+        if (builder.length() != 0) builder.append("\n");
+        builder.append(res.getString(R.string.login)).append(":").append(credentials.getLogin());
+        //password
         item = credentials.getPassword();
         if (!TextUtils.isEmpty(item)) {
-            builder.append(res.getString(R.string.password)).append(":").append(item).append("\n");
+            if (builder.length() != 0) builder.append("\n");
+            builder.append(res.getString(R.string.password)).append(":").append(item);
         }
+        //pin
         item = credentials.getPin();
         if (!TextUtils.isEmpty(item)) {
-            builder.append(res.getString(R.string.pin)).append(":").append(item).append("\n");
+            if (builder.length() != 0) builder.append("\n");
+            builder.append(res.getString(R.string.pin)).append(":").append(item);
         }
+        //details
         item = credentials.getDetails();
         if (!TextUtils.isEmpty(item)) {
-            builder.append(item).append("\n");
+            if (builder.length() != 0) builder.append("\n");
+            builder.append(item);
         }
         return builder.toString();
     }
 
     public static boolean isPinCodeActual(String pinCode) {
         return pinCode != null && pinCode.length() == Const.PIN_CODE_SIZE;
-    }
-
-    public static void nukeData() {
-        RepositoryProvider.getCredentialsRepository().nuke();
     }
 }

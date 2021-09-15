@@ -18,20 +18,11 @@ public interface CredentialsDao {
     @Query("SELECT * FROM Credentials ORDER BY position ASC")
     LiveData<List<Credentials>> getAll();
 
-    @Query("SELECT * FROM Credentials ORDER BY position ASC")
-    List<Credentials> getAllSync();
-
     @Query("SELECT * FROM Credentials WHERE id= :id")
     LiveData<Credentials> getById(int id);
 
     @Query("SELECT * FROM Credentials WHERE id= :id")
     Credentials getByIdSync(int id);
-
-    @Query("SELECT * FROM Credentials WHERE title= :title")
-    LiveData<Credentials> getByTitle(String title);
-
-    @Query("SELECT * FROM Credentials WHERE title= :title")
-    Credentials getByTitleSync(String title);
 
     @Query("DELETE FROM Credentials WHERE id = :id")
     void deleteById(int id);
@@ -55,7 +46,7 @@ public interface CredentialsDao {
     void delete(Credentials credentials);
 
     @Delete
-    void delete(List<Credentials> entries);
+    void delete(List<Credentials> credentials);
 
     @Query("DELETE FROM Credentials")
     void deleteAll();

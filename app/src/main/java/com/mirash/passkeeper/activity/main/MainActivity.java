@@ -6,8 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -146,7 +144,6 @@ public class MainActivity extends AppCompatActivity implements Observer<List<Cre
 
     @Override
     public void onChanged(List<Credentials> credentials) {
-        Log.d("LOL", "onChanged:\n" + TextUtils.join("\n", credentials));
         adapter = (CredentialsAdapter) credentialsRecycler.getAdapter();
         List<CredentialsItem> credentialsItems = new ArrayList<>(credentials.size());
         for (Credentials value : credentials) {
@@ -176,7 +173,6 @@ public class MainActivity extends AppCompatActivity implements Observer<List<Cre
 
     @Override
     public void onOrderChanged(List<CredentialsItem> items) {
-        Log.d("LOL", "onOrderChanged");
     }
 
     @Override
@@ -212,13 +208,12 @@ public class MainActivity extends AppCompatActivity implements Observer<List<Cre
 
     @Override
     public void run() {
-        Log.d("LOL", "finish after " + (Const.BACKGROUND_INACTIVITY_TIME / 1000) + "sec");
         finishAndRemoveTask();
     }
 
     @Override
     public void onWentToBackground() {
-        handler.postDelayed(this, Const.BACKGROUND_INACTIVITY_TIME);
+        handler.postDelayed(this, Const.BACKGROUND_INACTIVITY_KILL_TIME);
     }
 
     @Override

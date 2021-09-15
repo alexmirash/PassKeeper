@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Pass Keeper</string>
+    <string name="app_name">Familiar</string>
     <string name="title">Title</string>
     <string name="link">Link</string>
     <string name="login">Login</string>
@@ -9,7 +9,6 @@
     <string name="save">Save</string>
     <string name="delete">Delete</string>
     <string name="search">Search</string>
-    <string name="reorder">Reorder</string>
     <string name="done">Done</string>
     <string name="cancel">Cancel</string>
     <string name="pin_code_enter">Enter PIN-code</string>

@@ -4,12 +4,18 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/programming/MyAndroid/PassKeeper/app/src/main/res/drawable/action_bar_logo.xml" value="0.21145833333333333" />
+        <entry key="..\:/programming/MyAndroid/PassKeeper/app/src/main/res/drawable/cat_logo.xml" value="0.14722222222222223" />
         <entry key="..\:/programming/MyAndroid/PassKeeper/app/src/main/res/drawable/ic_add_24.xml" value="0.25277777777777777" />
+        <entry key="..\:/programming/MyAndroid/PassKeeper/app/src/main/res/drawable/ic_baseline_backspace_24.xml" value="0.14722222222222223" />
         <entry key="..\:/programming/MyAndroid/PassKeeper/app/src/main/res/drawable/ic_baseline_edit_note_24.xml" value="0.24259259259259258" />
         <entry key="..\:/programming/MyAndroid/PassKeeper/app/src/main/res/drawable/ic_baseline_share_24.xml" value="0.2962962962962963" />
         <entry key="..\:/programming/MyAndroid/PassKeeper/app/src/main/res/drawable/ic_baseline_visibility_24.xml" value="0.21510416666666668" />
         <entry key="..\:/programming/MyAndroid/PassKeeper/app/src/main/res/drawable/ic_cat.xml" value="0.2712962962962963" />
         <entry key="..\:/programming/MyAndroid/PassKeeper/app/src/main/res/drawable/ic_cat_2.xml" value="0.2712962962962963" />
+        <entry key="..\:/programming/MyAndroid/PassKeeper/app/src/main/res/drawable/ic_cat_footprint_pin.xml" value="0.14722222222222223" />
+        <entry key="..\:/programming/MyAndroid/PassKeeper/app/src/main/res/drawable/ic_cat_footprint_pin_2.xml" value="0.14722222222222223" />
+        <entry key="..\:/programming/MyAndroid/PassKeeper/app/src/main/res/drawable/ic_cat_login.xml" value="0.14722222222222223" />
+        <entry key="..\:/programming/MyAndroid/PassKeeper/app/src/main/res/drawable/ic_cat_paw.xml" value="0.14722222222222223" />
         <entry key="..\:/programming/MyAndroid/PassKeeper/app/src/main/res/drawable/ic_check.xml" value="0.21510416666666668" />
         <entry key="..\:/programming/MyAndroid/PassKeeper/app/src/main/res/drawable/ic_check_disabled.xml" value="0.2078125" />
         <entry key="..\:/programming/MyAndroid/PassKeeper/app/src/main/res/drawable/ic_circle_filled.xml" value="0.28888888888888886" />
@@ -17,8 +23,11 @@
         <entry key="..\:/programming/MyAndroid/PassKeeper/app/src/main/res/drawable/ic_delete.xml" value="0.2078125" />
         <entry key="..\:/programming/MyAndroid/PassKeeper/app/src/main/res/drawable/ic_drag_handle.xml" value="0.2265625" />
         <entry key="..\:/programming/MyAndroid/PassKeeper/app/src/main/res/drawable/ic_edit_note.xml" value="0.21510416666666668" />
+        <entry key="..\:/programming/MyAndroid/PassKeeper/app/src/main/res/drawable/ic_fingerprint.xml" value="0.15462962962962962" />
+        <entry key="..\:/programming/MyAndroid/PassKeeper/app/src/main/res/drawable/ic_fish_skeleton.xml" value="0.14722222222222223" />
         <entry key="..\:/programming/MyAndroid/PassKeeper/app/src/main/res/drawable/ic_key_24.xml" value="0.21510416666666668" />
         <entry key="..\:/programming/MyAndroid/PassKeeper/app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.21510416666666668" />
+        <entry key="..\:/programming/MyAndroid/PassKeeper/app/src/main/res/drawable/ic_launcher_kitty_foreground.xml" value="0.14351851851851852" />
         <entry key="..\:/programming/MyAndroid/PassKeeper/app/src/main/res/drawable/ic_lock_open.xml" value="0.30462962962962964" />
         <entry key="..\:/programming/MyAndroid/PassKeeper/app/src/main/res/drawable/ic_outline_vpn_key_24.xml" value="0.21510416666666668" />
         <entry key="..\:/programming/MyAndroid/PassKeeper/app/src/main/res/drawable/ic_reorder.xml" value="0.2265625" />
@@ -26,6 +35,7 @@
         <entry key="..\:/programming/MyAndroid/PassKeeper/app/src/main/res/drawable/ic_share.xml" value="0.2265625" />
         <entry key="..\:/programming/MyAndroid/PassKeeper/app/src/main/res/drawable/ic_visibility_off.xml" value="0.21510416666666668" />
         <entry key="..\:/programming/MyAndroid/PassKeeper/app/src/main/res/drawable/ic_visibility_on.xml" value="0.21510416666666668" />
+        <entry key="..\:/programming/MyAndroid/PassKeeper/app/src/main/res/drawable/key_logo.xml" value="0.14722222222222223" />
         <entry key="..\:/programming/MyAndroid/PassKeeper/app/src/main/res/drawable/key_logo_24.xml" value="0.21145833333333333" />
         <entry key="..\:/programming/MyAndroid/PassKeeper/app/src/main/res/drawable/link_text_selector.xml" value="0.24259259259259258" />
         <entry key="..\:/programming/MyAndroid/PassKeeper/app/src/main/res/drawable/list_divider.xml" value="0.24722222222222223" />

@@ -32,20 +32,8 @@ public class CredentialsRepository {
         dao.update(Credentials);
     }
 
-    public void delete(Credentials Credentials) {
-        dao.delete(Credentials);
-    }
-
-    public void delete(List<Credentials> credentials) {
-        dao.delete(credentials);
-    }
-
     public LiveData<List<Credentials>> getAllCredentialsLiveData() {
         return dao.getAll();
-    }
-
-    public List<Credentials> getAllCredentialsSync() {
-        return dao.getAllSync();
     }
 
     public LiveData<Credentials> getCredentialsById(int id) {
@@ -62,14 +50,6 @@ public class CredentialsRepository {
 
     public void deleteCredentialsById(int id) {
         dao.deleteById(id);
-    }
-
-    public LiveData<Credentials> getEntryByName(String name) {
-        return dao.getByTitle(name);
-    }
-
-    public Credentials getEntryByNameSync(String name) {
-        return dao.getByTitleSync(name);
     }
 
     public void nuke() {
