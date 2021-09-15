@@ -19,7 +19,7 @@
             android:layout_marginTop="48dp"
             android:textSize="@dimen/text_size_default"
             />
-        <com.mirash.passkeeper.activity.pin.view.PinIndicatorView
+        <com.mirash.familiar.activity.pin.view.PinIndicatorView
             android:id="@+id/pin_indicator"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -37,7 +37,7 @@
             android:visibility="gone"
             />
     </LinearLayout>
-    <com.mirash.passkeeper.view.PinInputView
+    <com.mirash.familiar.view.PinInputView
         android:id="@+id/pin_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

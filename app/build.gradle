@@ -6,7 +6,7 @@ android {
     compileSdk 31
 
     defaultConfig {
-        applicationId "com.mirash.passkeeper"
+        applicationId "com.mirash.familiar"
         minSdk 27
         targetSdk 31
         versionCode 1

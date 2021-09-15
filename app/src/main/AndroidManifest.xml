@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.mirash.passkeeper">
+    package="com.mirash.familiar">
 
     <uses-permission android:name="android.permission.VIBRATE" />
     <application
-        android:name=".PassKeeperApp"
+        android:name=".FamiliarApp"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher_kitty"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_kitty_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.PassKeeper">
+        android:theme="@style/Familiar">
         <activity
             android:name=".activity.LauncherActivity"
             android:exported="true"

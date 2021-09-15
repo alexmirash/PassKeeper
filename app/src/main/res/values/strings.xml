@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Familiar</string>
+    <string name="double_back_press_message">Press BACK again to exit.</string>
     <string name="title">Title</string>
     <string name="link">Link</string>
     <string name="login">Login</string>
@@ -17,4 +18,9 @@
     <string name="pin_code_create">Create PIN-code</string>
     <string name="pin_code_confirm">Confirm PIN-code</string>
     <string name="pin_code_incorrect">PIN-codes are different</string>
+    <string name="nuke">Nuke!</string>
+    <string name="auth_error">Authentication error: %s</string>
+    <string name="auth_fail">Authentication failed</string>
+    <string name="bio_login_title">Biometric login</string>
+    <string name="bio_login_message">Log in your biometric credential</string>
 </resources>
