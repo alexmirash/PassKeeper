@@ -3,7 +3,17 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/programming/MyAndroid/Familiar/app/src/main/res/drawable/ic_cat_login.xml" value="0.1361111111111111" />
+        <entry key="..\:/programming/MyAndroid/Familiar/app/src/main/res/drawable/ic_circle_outline.xml" value="0.1361111111111111" />
+        <entry key="..\:/programming/MyAndroid/Familiar/app/src/main/res/drawable/ic_clew.xml" value="0.1361111111111111" />
+        <entry key="..\:/programming/MyAndroid/Familiar/app/src/main/res/drawable/ic_fish_skeleton.xml" value="0.1361111111111111" />
         <entry key="..\:/programming/MyAndroid/Familiar/app/src/main/res/drawable/ic_launcher_kitty_foreground.xml" value="0.1398148148148148" />
+        <entry key="..\:/programming/MyAndroid/Familiar/app/src/main/res/drawable/list_divider.xml" value="0.1361111111111111" />
+        <entry key="..\:/programming/MyAndroid/Familiar/app/src/main/res/layout/activity_credentials_edit.xml" value="0.25" />
+        <entry key="..\:/programming/MyAndroid/Familiar/app/src/main/res/layout/credential_view.xml" value="0.17375886524822695" />
+        <entry key="..\:/programming/MyAndroid/Familiar/app/src/main/res/layout/credentials_item_view.xml" value="0.22" />
+        <entry key="..\:/programming/MyAndroid/Familiar/app/src/main/res/layout/credentials_login_data_view.xml" value="0.17375886524822695" />
+        <entry key="..\:/programming/MyAndroid/Familiar/app/src/main/res/layout/login_view.xml" value="0.247451343836886" />
         <entry key="..\:/programming/MyAndroid/Familiar/app/src/main/res/mipmap-anydpi-v26/ic_launcher_kitty.xml" value="0.1398148148148148" />
         <entry key="..\:/programming/MyAndroid/PassKeeper/app/src/main/res/drawable/action_bar_logo.xml" value="0.21145833333333333" />
         <entry key="..\:/programming/MyAndroid/PassKeeper/app/src/main/res/drawable/cat_logo.xml" value="0.14722222222222223" />

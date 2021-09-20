@@ -12,6 +12,10 @@ public interface ICredentials extends Filterable {
 
     String getLogin();
 
+    String getEmail();
+
+    String getPhone();
+
     String getPassword();
 
     String getPin();

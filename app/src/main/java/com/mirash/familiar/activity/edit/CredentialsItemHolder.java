@@ -8,6 +8,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mirash.familiar.R;
+import com.mirash.familiar.activity.pin.view.LoginView;
 import com.mirash.familiar.motion.ItemTouchStateCallback;
 
 
@@ -17,13 +18,13 @@ import com.mirash.familiar.motion.ItemTouchStateCallback;
 
 class CredentialsItemHolder extends RecyclerView.ViewHolder implements ItemTouchStateCallback {
     final View headerView;
+    final LoginView loginView;
+    final View passwordSectionView;
+    final View pinSectionView;
     final TextView titleView;
     final TextView linkView;
     final TextView detailsView;
-    final TextView loginView;
-    final View passwordSectionView;
     final TextView passwordView;
-    final View pinSectionView;
     final TextView pinView;
     final View editButton;
     final View shareButton;
@@ -36,13 +37,13 @@ class CredentialsItemHolder extends RecyclerView.ViewHolder implements ItemTouch
         titleView = headerView.findViewById(R.id.item_title_text);
         linkView = headerView.findViewById(R.id.item_link_text);
         detailsView = headerView.findViewById(R.id.item_details_text);
-        editButton = itemView.findViewById(R.id.item_edit_button);
-        loginView = itemView.findViewById(R.id.item_login_text);
+        loginView = itemView.findViewById(R.id.item_login_section);
         passwordSectionView = itemView.findViewById(R.id.item_password_section);
         passwordView = passwordSectionView.findViewById(R.id.item_password_text);
         pinSectionView = itemView.findViewById(R.id.item_pin_section);
         pinView = pinSectionView.findViewById(R.id.item_pin_text);
         passwordVisibilityCheckBox = itemView.findViewById(R.id.item_password_visibility_checkbox);
+        editButton = itemView.findViewById(R.id.item_edit_button);
         shareButton = itemView.findViewById(R.id.item_share_button);
     }
 

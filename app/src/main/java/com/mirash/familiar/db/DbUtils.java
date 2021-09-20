@@ -13,7 +13,7 @@ public class DbUtils {
     public static List<Credentials> getTestPredefinedCredentials() {
         List<Credentials> list = new ArrayList<>();
         Random r = new Random();
-        int count = 1000;
+        int count = 100;
         for (int i = 0; i < count; i++) {
             Credentials credentials = new Credentials();
             credentials.setTitle("Test_title_" + i);

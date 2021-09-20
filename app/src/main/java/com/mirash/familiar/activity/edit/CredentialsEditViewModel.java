@@ -24,10 +24,12 @@ public class CredentialsEditViewModel extends AndroidViewModel {
     public static final int INDEX_TITLE = 0;
     public static final int INDEX_LINK = 1;
     public static final int INDEX_LOGIN = 2;
-    public static final int INDEX_PASSWORD = 3;
-    public static final int INDEX_PIN = 4;
+    public static final int INDEX_EMAIL = 3;
+    public static final int INDEX_PHONE = 4;
+    public static final int INDEX_PASSWORD = 5;
+    public static final int INDEX_PIN = 6;
     private LiveData<Credentials> credentialsLiveData;
-    private final boolean[] fillStates = new boolean[]{false, false, false, false, false};
+    private final boolean[] fillStates = new boolean[]{false, false, false, false, false, false, false};
     private final MutableLiveData<Boolean> saveButtonEnableStateLiveData;
 
     private Integer credentialsId;
@@ -86,10 +88,12 @@ public class CredentialsEditViewModel extends AndroidViewModel {
         RepositoryProvider.getCredentialsRepository().insert(credentials);
     }
 
-    public static void fillCredentials(@NonNull ICredentials from, @NonNull CredentialsModel to) {
+    private static void fillCredentials(@NonNull ICredentials from, @NonNull CredentialsModel to) {
         to.setTitle(from.getTitle());
         to.setLink(from.getLink());
         to.setLogin(from.getLogin());
+        to.setEmail(from.getEmail());
+        to.setPhone(from.getPhone());
         to.setPassword(from.getPassword());
         to.setPin(from.getPin());
         to.setDetails(from.getDetails());
@@ -113,7 +117,8 @@ public class CredentialsEditViewModel extends AndroidViewModel {
     public void setFillState(int index, boolean state) {
         fillStates[index] = state;
         boolean result = (fillStates[INDEX_TITLE] || fillStates[INDEX_LINK])
-                && fillStates[INDEX_LOGIN] && (fillStates[INDEX_PASSWORD] || fillStates[INDEX_PIN]);
+                && (fillStates[INDEX_LOGIN] || fillStates[INDEX_EMAIL] || fillStates[INDEX_PHONE])
+                && (fillStates[INDEX_PASSWORD] || fillStates[INDEX_PIN]);
         saveButtonEnableStateLiveData.setValue(result);
     }
 }

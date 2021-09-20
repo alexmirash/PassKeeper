@@ -27,6 +27,8 @@ public class CredentialsEditActivity extends AppCompatActivity implements Observ
     private StyledTextInputLayout titleInputLayout;
     private StyledTextInputLayout linkInputLayout;
     private StyledTextInputLayout loginInputLayout;
+    private StyledTextInputLayout emailInputLayout;
+    private StyledTextInputLayout phoneInputLayout;
     private StyledTextInputLayout passwordInputLayout;
     private StyledTextInputLayout pinInputLayout;
     private StyledTextInputLayout detailsInputLayout;
@@ -44,6 +46,8 @@ public class CredentialsEditActivity extends AppCompatActivity implements Observ
         titleInputLayout = findViewById(R.id.item_title_input);
         linkInputLayout = findViewById(R.id.item_link_input);
         loginInputLayout = findViewById(R.id.item_login_input);
+        emailInputLayout = findViewById(R.id.item_email_input);
+        phoneInputLayout = findViewById(R.id.item_phone_input);
         passwordInputLayout = findViewById(R.id.item_password_input);
         pinInputLayout = findViewById(R.id.item_pin_input);
         detailsInputLayout = findViewById(R.id.item_details_input);
@@ -107,6 +111,8 @@ public class CredentialsEditActivity extends AppCompatActivity implements Observ
         titleInputLayout.setTextWithNoAnimation(credentials.getTitle());
         linkInputLayout.setTextWithNoAnimation(credentials.getLink());
         loginInputLayout.setTextWithNoAnimation(credentials.getLogin());
+        emailInputLayout.setTextWithNoAnimation(credentials.getEmail());
+        phoneInputLayout.setTextWithNoAnimation(credentials.getPhone());
         passwordInputLayout.setTextWithNoAnimation(credentials.getPassword());
         pinInputLayout.setTextWithNoAnimation(credentials.getPin());
         detailsInputLayout.setTextWithNoAnimation(credentials.getDetails());
@@ -117,6 +123,8 @@ public class CredentialsEditActivity extends AppCompatActivity implements Observ
         credentialsModel.setTitle(titleInputLayout.getText());
         credentialsModel.setLink(linkInputLayout.getText());
         credentialsModel.setLogin(loginInputLayout.getText());
+        credentialsModel.setEmail(emailInputLayout.getText());
+        credentialsModel.setPhone(phoneInputLayout.getText());
         credentialsModel.setPassword(passwordInputLayout.getText());
         credentialsModel.setPin(pinInputLayout.getText());
         credentialsModel.setDetails(detailsInputLayout.getText());
@@ -146,6 +154,8 @@ public class CredentialsEditActivity extends AppCompatActivity implements Observ
         initTextFillObserver(titleInputLayout, CredentialsEditViewModel.INDEX_TITLE);
         initTextFillObserver(linkInputLayout, CredentialsEditViewModel.INDEX_LINK);
         initTextFillObserver(loginInputLayout, CredentialsEditViewModel.INDEX_LOGIN);
+        initTextFillObserver(emailInputLayout, CredentialsEditViewModel.INDEX_EMAIL);
+        initTextFillObserver(phoneInputLayout, CredentialsEditViewModel.INDEX_PHONE);
         initTextFillObserver(passwordInputLayout, CredentialsEditViewModel.INDEX_PASSWORD);
         initTextFillObserver(pinInputLayout, CredentialsEditViewModel.INDEX_PIN);
     }

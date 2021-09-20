@@ -35,5 +35,10 @@
         <item name="android:textColor">@color/text_default_selector</item>
     </style>
 
-
+    <style name="DelimiterImage">
+        <item name="android:layout_marginTop">32dp</item>
+        <item name="android:layout_width">@dimen/icon_size_default</item>
+        <item name="android:layout_height">@dimen/icon_size_default</item>
+        <item name="android:scaleType">centerInside</item>
+    </style>
 </resources>

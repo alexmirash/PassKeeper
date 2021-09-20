@@ -7,6 +7,8 @@ public class CredentialsModel implements ICredentials {
     protected String title;
     protected String link;
     protected String login;
+    protected String email;
+    protected String phone;
     protected String password;
     protected String pin;
     protected String details;
@@ -25,6 +27,16 @@ public class CredentialsModel implements ICredentials {
     @Override
     public String getLogin() {
         return login;
+    }
+
+    @Override
+    public String getEmail() {
+        return email;
+    }
+
+    @Override
+    public String getPhone() {
+        return phone;
     }
 
     @Override
@@ -64,6 +76,14 @@ public class CredentialsModel implements ICredentials {
         this.login = login;
     }
 
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
     public void setPassword(String password) {
         this.password = password;
     }
@@ -86,6 +106,8 @@ public class CredentialsModel implements ICredentials {
                 "title='" + title + '\'' +
                 ", link='" + link + '\'' +
                 ", login='" + login + '\'' +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
                 ", password='" + password + '\'' +
                 ", pin='" + pin + '\'' +
                 ", details='" + details + '\'' +
@@ -96,6 +118,8 @@ public class CredentialsModel implements ICredentials {
     public boolean isAlike(String query) {
         return title != null && title.toLowerCase().contains(query)
                 || link != null && link.toLowerCase().contains(query)
-                || login.toLowerCase().contains(query);
+                || login.toLowerCase().contains(query)
+                || email.toLowerCase().contains(query)
+                || phone.toLowerCase().contains(query);
     }
 }

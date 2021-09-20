@@ -31,6 +31,16 @@ public class CredentialsItem implements ICredentials {
     }
 
     @Override
+    public String getEmail() {
+        return credentials.getEmail();
+    }
+
+    @Override
+    public String getPhone() {
+        return credentials.getPhone();
+    }
+
+    @Override
     public String getPassword() {
         return credentials.getPassword();
     }

@@ -11,8 +11,8 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mirash.familiar.R;
-import com.mirash.familiar.motion.ItemTouchHelperAdapter;
 import com.mirash.familiar.model.CredentialsItem;
+import com.mirash.familiar.motion.ItemTouchHelperAdapter;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -50,6 +50,7 @@ public class CredentialsAdapter extends RecyclerView.Adapter<CredentialsItemHold
     @Override
     public void onBindViewHolder(@NonNull CredentialsItemHolder holder, int position) {
         CredentialsItem item = items.get(position);
+        //title
         String title = item.getTitle();
         if (TextUtils.isEmpty(title)) {
             holder.titleView.setVisibility(View.GONE);
@@ -57,6 +58,7 @@ public class CredentialsAdapter extends RecyclerView.Adapter<CredentialsItemHold
             holder.titleView.setVisibility(View.VISIBLE);
         }
         holder.titleView.setText(title);
+        //link
         String link = item.getLink();
         if (TextUtils.isEmpty(link)) {
             holder.linkView.setVisibility(View.GONE);
@@ -66,14 +68,13 @@ public class CredentialsAdapter extends RecyclerView.Adapter<CredentialsItemHold
             holder.headerView.setOnClickListener(view -> callback.onLinkClick(link));
         }
         holder.linkView.setText(link);
+        //details
         String details = item.getDetails();
-        if (TextUtils.isEmpty(details)) {
-            holder.detailsView.setVisibility(View.GONE);
-        } else {
-            holder.detailsView.setVisibility(View.VISIBLE);
-        }
+        holder.detailsView.setVisibility(TextUtils.isEmpty(details) ? View.GONE : View.VISIBLE);
         holder.detailsView.setText(details);
-        holder.loginView.setText(item.getLogin());
+        //login
+        holder.loginView.setItems(item.getLogin(), item.getEmail(), item.getPhone());
+        //password
         String password = item.getPassword();
         if (TextUtils.isEmpty(password)) {
             holder.passwordSectionView.setVisibility(View.GONE);
@@ -88,6 +89,7 @@ public class CredentialsAdapter extends RecyclerView.Adapter<CredentialsItemHold
             }
         }
         holder.passwordView.setText(password);
+        //pin
         String pin = item.getPin();
         if (TextUtils.isEmpty(pin)) {
             holder.pinSectionView.setVisibility(View.GONE);
