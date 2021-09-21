@@ -76,40 +76,29 @@ public final class Utils {
         activity.startActivity(shareIntent);
     }
 
-    public static String fromCredentials(ICredentials credentials) {
-        Resources res = FamiliarApp.getRes();
+    public static String createMultiFieldString(CharSequence... items) {
         StringBuilder builder = new StringBuilder();
-        //title
-        String item = credentials.getTitle();
-        if (!TextUtils.isEmpty(item)) builder.append(item);
-        //link
-        item = credentials.getLink();
-        if (!TextUtils.isEmpty(item)) {
-            if (builder.length() != 0) builder.append("\n");
-            builder.append(item);
-        }
-        //login
-        if (builder.length() != 0) builder.append("\n");
-        builder.append(res.getString(R.string.login)).append(":").append(credentials.getLogin());
-        //password
-        item = credentials.getPassword();
-        if (!TextUtils.isEmpty(item)) {
-            if (builder.length() != 0) builder.append("\n");
-            builder.append(res.getString(R.string.password)).append(":").append(item);
-        }
-        //pin
-        item = credentials.getPin();
-        if (!TextUtils.isEmpty(item)) {
-            if (builder.length() != 0) builder.append("\n");
-            builder.append(res.getString(R.string.pin)).append(":").append(item);
-        }
-        //details
-        item = credentials.getDetails();
-        if (!TextUtils.isEmpty(item)) {
-            if (builder.length() != 0) builder.append("\n");
-            builder.append(item);
+        for (CharSequence item : items) {
+            if (!TextUtils.isEmpty(item)) {
+                if (builder.length() != 0) builder.append("\n");
+                builder.append(item);
+            }
         }
         return builder.toString();
+    }
+
+    public static String fromCredentials(ICredentials credentials) {
+        Resources res = FamiliarApp.getRes();
+        return createMultiFieldString(
+                credentials.getTitle(),
+                credentials.getLink(),
+                new LabelString(res.getString(R.string.login), credentials.getLogin()),
+                new LabelString(res.getString(R.string.email), credentials.getEmail()),
+                new LabelString(res.getString(R.string.phone), credentials.getPhone()),
+                new LabelString(res.getString(R.string.password), credentials.getPassword()),
+                new LabelString(res.getString(R.string.pin), credentials.getPin()),
+                credentials.getDetails()
+        );
     }
 
     public static boolean isPinCodeActual(String pinCode) {
