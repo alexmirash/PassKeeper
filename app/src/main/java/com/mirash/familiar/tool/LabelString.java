@@ -11,7 +11,7 @@ class LabelString implements CharSequence {
     private final String str;
 
     public LabelString(String label, String value) {
-        str = TextUtils.isEmpty(value) ? "" : label + ":" + value;
+        str = TextUtils.isEmpty(value) ? "" : label + ": " + value;
     }
 
     @Override

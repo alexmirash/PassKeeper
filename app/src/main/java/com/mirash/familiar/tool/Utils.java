@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.google.android.material.textfield.TextInputLayout;
+import com.mirash.familiar.BuildConfig;
 import com.mirash.familiar.Const;
 import com.mirash.familiar.FamiliarApp;
 import com.mirash.familiar.R;
@@ -23,6 +24,10 @@ import com.mirash.familiar.model.ICredentials;
  * @author Mirash
  */
 public final class Utils {
+    public static String getAppVersionName() {
+        return BuildConfig.VERSION_NAME + " (" + BuildConfig.VERSION_CODE + ")";
+    }
+
     public static void openLinkExternally(@NonNull Activity activity, String link) throws ActivityNotFoundException {
         if (link == null) return;
         if (!link.startsWith("http://") && !link.startsWith("https://")) {
@@ -103,5 +108,16 @@ public final class Utils {
 
     public static boolean isPinCodeActual(String pinCode) {
         return pinCode != null && pinCode.length() == Const.PIN_CODE_SIZE;
+    }
+
+    // Request code for creating a PDF document.
+    private static final int CREATE_FILE = 1;
+
+    private static void createFile(Activity activity) {
+        Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_TITLE, "test.txt");
+        activity.startActivityForResult(intent, CREATE_FILE);
     }
 }

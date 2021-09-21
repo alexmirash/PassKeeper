@@ -9,8 +9,8 @@ android {
         applicationId "com.mirash.familiar"
         minSdk 27
         targetSdk 31
-        versionCode 1
-        versionName "1.0"
+        versionCode 3
+        versionName "1.2"
     }
 
     buildTypes {
