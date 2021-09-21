@@ -110,14 +110,15 @@ public final class Utils {
         return pinCode != null && pinCode.length() == Const.PIN_CODE_SIZE;
     }
 
-    // Request code for creating a PDF document.
-    private static final int CREATE_FILE = 1;
+    public static boolean isStringAlike(String value, String query) {
+        return value != null && value.toLowerCase().contains(query);
+    }
 
     private static void createFile(Activity activity) {
         Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("text/plain");
         intent.putExtra(Intent.EXTRA_TITLE, "test.txt");
-        activity.startActivityForResult(intent, CREATE_FILE);
+        activity.startActivityForResult(intent, 1);
     }
 }

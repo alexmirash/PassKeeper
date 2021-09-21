@@ -1,5 +1,7 @@
 package com.mirash.familiar.model;
 
+import static com.mirash.familiar.tool.Utils.isStringAlike;
+
 /**
  * @author Mirash
  */
@@ -116,10 +118,10 @@ public class CredentialsModel implements ICredentials {
 
     @Override
     public boolean isAlike(String query) {
-        return title != null && title.toLowerCase().contains(query)
-                || link != null && link.toLowerCase().contains(query)
-                || login.toLowerCase().contains(query)
-                || email.toLowerCase().contains(query)
-                || phone.toLowerCase().contains(query);
+        return isStringAlike(title, query)
+                || isStringAlike(link, query)
+                || isStringAlike(login, query)
+                || isStringAlike(email, query)
+                || isStringAlike(phone, query);
     }
 }
