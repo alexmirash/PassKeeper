@@ -43,7 +43,7 @@ public class PinCodeConfirmActivity extends PinCodeBaseActivity {
     protected void checkPinCode(String pinCode) {
         if (pinCode == null || pinCode.length() != Const.PIN_CODE_SIZE) return;
         if (Objects.equals(desiredPinCode, pinCode)) {
-            EncryptedAppPreferences.getInstance().putString(Const.KEY_PIN_CODE, pinCode);
+            EncryptedAppPreferences.getInstance().setPinCode(pinCode);
             startNewActivity(MainActivity.class);
         } else {
             changeAlpha(pinCodeDetailsView, 1);
