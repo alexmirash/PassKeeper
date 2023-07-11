@@ -51,7 +51,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|start"
-        android:text="start"
         />
     <com.google.android.material.button.MaterialButton
         android:id="@+id/pin_button_bottom_end"
@@ -59,6 +58,5 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:text="end"
         />
 </FrameLayout>

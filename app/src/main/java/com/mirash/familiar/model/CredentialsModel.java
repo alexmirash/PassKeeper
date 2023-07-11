@@ -2,6 +2,8 @@ package com.mirash.familiar.model;
 
 import static com.mirash.familiar.tool.Utils.isStringAlike;
 
+import androidx.annotation.NonNull;
+
 /**
  * @author Mirash
  */
@@ -102,6 +104,7 @@ public class CredentialsModel implements ICredentials {
         this.position = position;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "[" + position + "]{" +
