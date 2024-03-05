@@ -1,4 +1,11 @@
 <resources>
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.Material3.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.Material3.Light" />
+
+<!--    <style name="AppTheme.Toolbar.Title" parent="TextAppearance.Material3.ActionBar.Title">-->
+<!--        <item name="android:textColor">@android:color/white</item>-->
+<!--    </style>-->
 
     <style name="TextInputLayout" parent="Widget.Material3.TextInputLayout.OutlinedBox.Dense">
         <item name="android:layout_height">wrap_content</item>
@@ -10,6 +17,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">@dimen/text_size_default</item>
         <item name="android:imeOptions">actionDone</item>
+        <item name="android:textColor">@android:color/black</item>
     </style>
 
     <style name="PinButton" parent="Widget.Material3.Button.TextButton">
