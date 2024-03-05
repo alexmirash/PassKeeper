@@ -22,7 +22,13 @@ interface UserDao {
     fun getUsersWithCredentialsSync(): List<UserWithCredentials>
 
     @Query("SELECT * FROM User")
+    fun getAll(): LiveData<List<User>>
+
+    @Query("SELECT * FROM User")
     fun getAllSync(): List<User>
+
+    @Query("SELECT * FROM User WHERE id = :id")
+    fun getById(id: Long): LiveData<User>
 
     @Query("SELECT * FROM User WHERE id = :id")
     fun getByIdSync(id: Long): User?

@@ -9,7 +9,9 @@ import com.mirash.familiar.db.Credentials
 import com.mirash.familiar.db.RepositoryProvider.credentialsRepository
 import com.mirash.familiar.model.CredentialsModel
 import com.mirash.familiar.model.ICredentials
-import java.util.concurrent.Executors
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 /**
  * @author Mirash
@@ -33,7 +35,7 @@ class CredentialsEditViewModel(application: Application) : AndroidViewModel(appl
     }
 
     fun saveCredentials(credentials: ICredentials) {
-        Executors.newSingleThreadScheduledExecutor().execute { insertCredentialsSync(credentials) }
+        runBlocking { launch(Dispatchers.Default) { insertCredentialsSync(credentials) } }
     }
 
     private fun insertCredentialsSync(data: ICredentials) {
@@ -48,15 +50,17 @@ class CredentialsEditViewModel(application: Application) : AndroidViewModel(appl
     }
 
     fun deleteCredentials() {
-        Executors.newSingleThreadScheduledExecutor().execute {
-            credentialsId?.let {
-                credentialsRepository.deleteCredentialsById(it)
-                val credentials =
-                    credentialsRepository.getCredentialsUnderPositionByUserIdSync(credentialsPosition)
-                for (c in credentials) {
-                    c.position--
+        runBlocking {
+            launch(Dispatchers.Default) {
+                credentialsId?.let {
+                    credentialsRepository.deleteCredentialsById(it)
+                    val credentials =
+                        credentialsRepository.getCredentialsUnderPositionByUserIdSync(credentialsPosition)
+                    for (c in credentials) {
+                        c.position--
+                    }
+                    credentialsRepository.updateAll(credentials)
                 }
-                credentialsRepository.updateAll(credentials)
             }
         }
     }

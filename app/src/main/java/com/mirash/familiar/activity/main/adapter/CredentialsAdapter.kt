@@ -1,7 +1,6 @@
 package com.mirash.familiar.activity.main.adapter
 
 import android.annotation.SuppressLint
-import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -38,11 +37,7 @@ class CredentialsAdapter(
         val item = items[position]
         //title
         val title = item.title
-        if (TextUtils.isEmpty(title)) {
-            holder.binding.itemTitleText.visibility = View.GONE
-        } else {
-            holder.binding.itemTitleText.visibility = View.VISIBLE
-        }
+        holder.binding.itemTitleText.visibility = if (title.isNullOrEmpty()) View.GONE else View.VISIBLE
         holder.binding.itemTitleText.text = title
         //link
         val link = item.link

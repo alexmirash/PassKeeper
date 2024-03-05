@@ -6,6 +6,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
@@ -13,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.ViewCompat
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -26,6 +28,7 @@ import com.mirash.familiar.activity.main.adapter.CredentialsAdapter
 import com.mirash.familiar.activity.main.adapter.CredentialsItemCallback
 import com.mirash.familiar.databinding.ActivityMainBinding
 import com.mirash.familiar.db.Credentials
+import com.mirash.familiar.db.User
 import com.mirash.familiar.model.CredentialsItem
 import com.mirash.familiar.motion.ItemTouchStateCallback
 import com.mirash.familiar.motion.OnStartDragListener
@@ -43,13 +46,15 @@ import com.mirash.familiar.tool.fromCredentials
 import com.mirash.familiar.tool.listener.AppShowObserver
 import com.mirash.familiar.tool.openLinkExternally
 import com.mirash.familiar.tool.share
+import com.mirash.familiar.user.TAG_USER
+import com.mirash.familiar.user.UserControl
 import java.util.Locale
 
 /**
  * @author Mirash
  */
-class MainActivity : AppCompatActivity(), Observer<List<Credentials>>, CredentialsItemCallback,
-    OnStartDragListener, ItemTouchStateCallback, Runnable, AppShowObserver {
+class MainActivity : AppCompatActivity(), MainModelCallback, CredentialsItemCallback, OnStartDragListener,
+    ItemTouchStateCallback, Runnable, AppShowObserver {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var model: MainActivityModel
@@ -60,16 +65,43 @@ class MainActivity : AppCompatActivity(), Observer<List<Credentials>>, Credentia
     private var isAppBarExpanded = false
     private var appBarMenu: Menu? = null
 
+    private val userObserver: Observer<User> = Observer { value ->
+        Log.d(TAG_USER, "onUserChanged: ${value.id} ${value.name}")
+        runOnUiThread {
+            supportActionBar?.title = value.name
+            binding.toolbarLayout.title = value.name
+        }
+    }
+
+    private val credentialsObserver: Observer<List<Credentials>> = object : Observer<List<Credentials>> {
+        override fun onChanged(value: List<Credentials>) {
+            Log.d(TAG_USER, "onCredentialsChanged: ${value.size}")
+            val credentialsItems: MutableList<CredentialsItem> = ArrayList(value.size)
+            for (credential in value) {
+                credentialsItems.add(CredentialsItem(credential))
+            }
+            binding.credentialsRecycler.adapter?.let {
+                (it as CredentialsAdapter).setItems(credentialsItems)
+            } ?: run {
+                val credentialsAdapter = CredentialsAdapter(
+                    credentialsItems, this@MainActivity
+                )
+                binding.credentialsRecycler.adapter = credentialsAdapter
+                val callback = SimpleItemTouchHelperCallback(credentialsAdapter)
+                callback.touchStateCallback = this@MainActivity
+                val helper = ItemTouchHelper(callback)
+                helper.attachToRecyclerView(binding.credentialsRecycler)
+                itemTouchHelper = helper
+                adapter = credentialsAdapter
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
-//        supportActionBar?.let {
-//            it.setLogo(R.drawable.action_bar_logo)
-//            it.setDisplayUseLogoEnabled(true)
-//            it.setDisplayShowHomeEnabled(true)
-//        }
         binding.credentialsRecycler.layoutManager = LinearLayoutManager(this)
         binding.credentialsRecycler.addItemDecoration(DividerListItemDecoration(this))
         binding.credentialsRecycler.addItemDecoration(
@@ -77,8 +109,7 @@ class MainActivity : AppCompatActivity(), Observer<List<Credentials>>, Credentia
                 resources.getDimensionPixelSize(R.dimen.main_bottom_padding)
             )
         )
-        model = ViewModelProvider(this)[MainActivityModel::class.java]
-        model.credentialsModelLiveData.observe(this, this)
+        model = ViewModelProvider(this, MainViewModelFactory(application, this))[MainActivityModel::class.java]
         binding.credentialsAddFab.setOnClickListener { showEditCredentialsScreen(null) }
         FamiliarApp.instance.addAppShowObserver(this)
         initAppBarBehaviour()
@@ -86,7 +117,6 @@ class MainActivity : AppCompatActivity(), Observer<List<Credentials>>, Credentia
 
     override fun onDestroy() {
         super.onDestroy()
-        model.credentialsModelLiveData.removeObserver(this)
         FamiliarApp.instance.removeAppShowObserver(this)
     }
 
@@ -162,27 +192,6 @@ class MainActivity : AppCompatActivity(), Observer<List<Credentials>>, Credentia
         return true
     }
 
-    override fun onChanged(value: List<Credentials>) {
-        val credentialsItems: MutableList<CredentialsItem> = ArrayList(value.size)
-        for (credential in value) {
-            credentialsItems.add(CredentialsItem(credential))
-        }
-        binding.credentialsRecycler.adapter?.let {
-            (it as CredentialsAdapter).setItems(credentialsItems)
-        } ?: run {
-            val credentialsAdapter = CredentialsAdapter(
-                credentialsItems, this
-            )
-            binding.credentialsRecycler.adapter = credentialsAdapter
-            val callback = SimpleItemTouchHelperCallback(credentialsAdapter)
-            callback.touchStateCallback = this
-            val helper = ItemTouchHelper(callback)
-            helper.attachToRecyclerView(binding.credentialsRecycler)
-            itemTouchHelper = helper
-            adapter = credentialsAdapter
-        }
-    }
-
     override fun onLinkClick(link: String) {
         openLinkExternally(this, link)
     }
@@ -236,6 +245,7 @@ class MainActivity : AppCompatActivity(), Observer<List<Credentials>>, Credentia
         if (item.itemId == R.id.user) {
 //            val intent = Intent(this, UserActivity::class.java)
 //            startActivity(intent)
+            UserControl.setRandomUser()
             applyExpandedState()
         }
         return super.onOptionsItemSelected(item)
@@ -266,7 +276,13 @@ class MainActivity : AppCompatActivity(), Observer<List<Credentials>>, Credentia
         isAppBarExpanded = expanded
     }
 
-//    private fun hideOption(id: Int) {
-//        menu?.findItem(id)?.isVisible = false
-//    }
+    override fun setUserObservers(user: LiveData<User>, credentials: LiveData<List<Credentials>>) {
+        user.observe(this, userObserver)
+        credentials.observe(this, credentialsObserver)
+    }
+
+    override fun clearUserObservers(user: LiveData<User>, credentials: LiveData<List<Credentials>>) {
+        user.removeObserver(userObserver)
+        credentials.removeObserver(credentialsObserver)
+    }
 }

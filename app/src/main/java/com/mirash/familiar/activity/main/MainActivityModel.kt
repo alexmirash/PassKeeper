@@ -1,22 +1,51 @@
 package com.mirash.familiar.activity.main
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import com.mirash.familiar.db.Credentials
 import com.mirash.familiar.db.RepositoryProvider
+import com.mirash.familiar.db.User
+import com.mirash.familiar.eventmanager.EventManager
+import com.mirash.familiar.eventmanager.event.DataEvent
+import com.mirash.familiar.eventmanager.subscribe
+import com.mirash.familiar.eventmanager.subscription.Subscription
 import com.mirash.familiar.model.CredentialsItem
-import java.util.concurrent.Executors
+import com.mirash.familiar.tool.AppEventType
+import com.mirash.familiar.user.TAG_USER
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 /**
  * @author Mirash
  */
-class MainActivityModel(application: Application) : AndroidViewModel(application) {
-    val credentialsModelLiveData: LiveData<List<Credentials>> =
+class MainActivityModel(application: Application, private var callback: MainModelCallback? = null) :
+    AndroidViewModel(application) {
+
+    private var userLiveData: LiveData<User> = RepositoryProvider.userRepository.getById()
+    private var credentialsLiveData: LiveData<List<Credentials>> =
         RepositoryProvider.credentialsRepository.getAllCredentialsByUserId()
 
+    init {
+        callback?.setUserObservers(userLiveData, credentialsLiveData)
+    }
+
+    val usersLiveData: LiveData<List<User>> = RepositoryProvider.userRepository.getAll()
+
+
+    private val userSubscription: Subscription = EventManager.subscribe<DataEvent<Long>>(AppEventType.USER_SET) {
+        Log.d(TAG_USER, "MainActivityModel USER_SET event: ${it.data}")
+        callback?.clearUserObservers(userLiveData, credentialsLiveData)
+        userLiveData = RepositoryProvider.userRepository.getById(it.data)
+        credentialsLiveData = RepositoryProvider.credentialsRepository.getAllCredentialsByUserId(it.data)
+        callback?.setUserObservers(userLiveData, credentialsLiveData)
+    }
+
     fun handleOrderChanged(items: List<CredentialsItem>) {
-        Executors.newSingleThreadScheduledExecutor().execute { handleOrderChangedSync(items) }
+        runBlocking { launch(Dispatchers.Default) { handleOrderChangedSync(items) } }
+//        Executors.newSingleThreadScheduledExecutor().execute { handleOrderChangedSync(items) }
     }
 
     private fun handleOrderChangedSync(items: List<CredentialsItem>) {
@@ -28,5 +57,11 @@ class MainActivityModel(application: Application) : AndroidViewModel(application
             credentials.add(credById)
         }
         RepositoryProvider.credentialsRepository.updateAll(credentials)
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        callback = null
+        userSubscription.unsubscribe()
     }
 }

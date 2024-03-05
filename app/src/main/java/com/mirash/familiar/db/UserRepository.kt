@@ -1,16 +1,23 @@
 package com.mirash.familiar.db
 
+import androidx.lifecycle.LiveData
+import com.mirash.familiar.user.UserControl
+
 /**
  * @author Mirash
  */
 class UserRepository(database: FamiliarDatabase) {
     private val dao: UserDao = database.getUserDao()
 
-    fun insert(user: User): Long = dao.insert(user)
+    fun getAll(): LiveData<List<User>> = dao.getAll()
 
     fun getAllSync(): List<User> = dao.getAllSync()
 
-    fun getByIdSync(id: Long): User? = dao.getByIdSync(id)
+    fun getById(id: Long = UserControl.userId): LiveData<User> = dao.getById(id)
+
+    fun getByIdSync(id: Long = UserControl.userId): User? = dao.getByIdSync(id)
+
+    fun insert(user: User): Long = dao.insert(user)
 
     fun update(user: User) {
         dao.update(user)

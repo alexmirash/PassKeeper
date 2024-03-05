@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.mirash.familiar.FamiliarApp
-import java.util.Random
+import kotlin.concurrent.thread
 
 object RepositoryProvider {
     private val database: FamiliarDatabase by lazy {
@@ -29,7 +29,9 @@ object RepositoryProvider {
 
             override fun onOpen(db: SupportSQLiteDatabase) {
                 Log.d(TAG_DB, "db opOpen")
-                logUserCreds()
+                thread {
+                    logUserCredentialsSync()
+                }
             }
         }
         return Room.databaseBuilder(application, FamiliarDatabase::class.java, "FamiliarDb")
@@ -41,15 +43,13 @@ object RepositoryProvider {
     }
 }
 
-fun logUserCreds() {
-    Thread {
-        for (data in RepositoryProvider.userRepository.getUsersWithCredentialsSync()) {
-            for (c in data.credentials) {
-                Log.d(TAG_DB, "${data.user.id}, ${data.user.name}: ${c.userId}, ${c.title}")
-            }
+fun logUserCredentialsSync() {
+    for (data in RepositoryProvider.userRepository.getUsersWithCredentialsSync()) {
+        for (c in data.credentials) {
+            Log.d(TAG_DB, "${data.user.id}, ${data.user.name}: ${c.userId}, ${c.title}")
         }
-        for (data in RepositoryProvider.credentialsRepository.getAllCredentialsSync()) {
-            Log.d(TAG_DB, "${data.userId}, ${data.title}")
-        }
-    }.start()
+    }
+    for (data in RepositoryProvider.credentialsRepository.getAllCredentialsSync()) {
+        Log.d(TAG_DB, "${data.userId}, ${data.title}")
+    }
 }
