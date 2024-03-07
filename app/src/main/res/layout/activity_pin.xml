@@ -8,7 +8,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="48dp"
+        android:layout_marginHorizontal="@dimen/triple_padding"
         android:orientation="vertical"
         >
         <TextView
@@ -16,15 +16,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="48dp"
+            android:layout_marginTop="@dimen/triple_padding"
             android:textSize="@dimen/text_size_default"
             />
         <com.mirash.familiar.activity.pin.view.PinIndicatorView
             android:id="@+id/pin_indicator"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginHorizontal="@dimen/side_padding"
+            android:layout_marginTop="@dimen/double_padding"
             />
         <TextView
             android:id="@+id/pin_code_details"
@@ -42,8 +42,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:layout_marginHorizontal="32dp"
-        android:layout_marginBottom="60dp"
+        android:layout_marginHorizontal="@dimen/double_padding"
+        android:layout_marginBottom="@dimen/pin_input_view_margin_bottom"
         />
     <com.google.android.material.button.MaterialButton
         android:id="@+id/pin_button_bottom_start"

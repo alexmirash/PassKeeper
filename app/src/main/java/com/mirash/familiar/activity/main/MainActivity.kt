@@ -24,12 +24,17 @@ import com.google.android.material.appbar.AppBarLayout
 import com.mirash.familiar.FamiliarApp
 import com.mirash.familiar.R
 import com.mirash.familiar.activity.edit.CredentialsEditActivity
-import com.mirash.familiar.activity.main.adapter.CredentialsAdapter
-import com.mirash.familiar.activity.main.adapter.CredentialsItemCallback
+import com.mirash.familiar.activity.main.credentials.CredentialsAdapter
+import com.mirash.familiar.activity.main.credentials.CredentialsItemCallback
+import com.mirash.familiar.activity.main.user.UserAdapter
+import com.mirash.familiar.activity.main.user.UserItemCallback
 import com.mirash.familiar.databinding.ActivityMainBinding
 import com.mirash.familiar.db.Credentials
 import com.mirash.familiar.db.User
-import com.mirash.familiar.model.CredentialsItem
+import com.mirash.familiar.model.credentials.CredentialsItem
+import com.mirash.familiar.model.credentials.ICredentials
+import com.mirash.familiar.model.user.IUser
+import com.mirash.familiar.model.user.UserItem
 import com.mirash.familiar.motion.ItemTouchStateCallback
 import com.mirash.familiar.motion.OnStartDragListener
 import com.mirash.familiar.motion.SimpleItemTouchHelperCallback
@@ -49,6 +54,8 @@ import com.mirash.familiar.tool.share
 import com.mirash.familiar.user.TAG_USER
 import com.mirash.familiar.user.UserControl
 import java.util.Locale
+import kotlin.math.abs
+
 
 /**
  * @author Mirash
@@ -58,18 +65,20 @@ class MainActivity : AppCompatActivity(), MainModelCallback, CredentialsItemCall
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var model: MainActivityModel
-    private var adapter: CredentialsAdapter? = null
+    private var credentialsAdapter: CredentialsAdapter? = null
+    private var userAdapter: UserAdapter? = null
     private var itemTouchHelper: ItemTouchHelper? = null
     private val handler = Handler(Looper.getMainLooper())
     private var isBackPressedOnce = false
     private var isAppBarExpanded = false
     private var appBarMenu: Menu? = null
+    private var userMenuItem: MenuItem? = null
 
     private val userObserver: Observer<User> = Observer { value ->
         Log.d(TAG_USER, "onUserChanged: ${value.id} ${value.name}")
+        userAdapter?.setCheckedItem(value.id)
         runOnUiThread {
-            supportActionBar?.title = value.name
-            binding.toolbarLayout.title = value.name
+            binding.userTitle.text = value.name
         }
     }
 
@@ -83,25 +92,21 @@ class MainActivity : AppCompatActivity(), MainModelCallback, CredentialsItemCall
             binding.credentialsRecycler.adapter?.let {
                 (it as CredentialsAdapter).setItems(credentialsItems)
             } ?: run {
-                val credentialsAdapter = CredentialsAdapter(
+                val adapter = CredentialsAdapter(
                     credentialsItems, this@MainActivity
                 )
-                binding.credentialsRecycler.adapter = credentialsAdapter
-                val callback = SimpleItemTouchHelperCallback(credentialsAdapter)
+                binding.credentialsRecycler.adapter = adapter
+                val callback = SimpleItemTouchHelperCallback(adapter)
                 callback.touchStateCallback = this@MainActivity
                 val helper = ItemTouchHelper(callback)
                 helper.attachToRecyclerView(binding.credentialsRecycler)
                 itemTouchHelper = helper
-                adapter = credentialsAdapter
+                credentialsAdapter = adapter
             }
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        setSupportActionBar(binding.toolbar)
+    private fun initCredentialsRecycler() {
         binding.credentialsRecycler.layoutManager = LinearLayoutManager(this)
         binding.credentialsRecycler.addItemDecoration(DividerListItemDecoration(this))
         binding.credentialsRecycler.addItemDecoration(
@@ -109,10 +114,54 @@ class MainActivity : AppCompatActivity(), MainModelCallback, CredentialsItemCall
                 resources.getDimensionPixelSize(R.dimen.main_bottom_padding)
             )
         )
-        model = ViewModelProvider(this, MainViewModelFactory(application, this))[MainActivityModel::class.java]
+    }
+
+    private fun initUserRecycler() {
+        binding.userRecycler.layoutManager = LinearLayoutManager(this)
+        binding.userRecycler.addItemDecoration(
+            VerticalBottomSpaceItemDecoration(
+                resources.getDimensionPixelSize(R.dimen.half_padding)
+            )
+        )
+        model.usersLiveData.observe(this) { users ->
+            Log.d(TAG_USER, "onUsersChange: ${users.size}")
+            val items = ArrayList<UserItem>(users.size)
+            for (user in users) {
+                items.add(UserItem(user))
+            }
+            binding.credentialsRecycler.adapter?.let { adapter ->
+                (adapter as UserAdapter).items = items
+            } ?: run {
+                val adapter = UserAdapter(
+                    items, object : UserItemCallback {
+                        override fun onChecked(item: IUser) {
+                            UserControl.setUser(item.id)
+                        }
+
+                        override fun onEditClick(item: IUser) {
+                        }
+                    }
+                )
+                binding.userRecycler.adapter = adapter
+                userAdapter = adapter
+            }
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        model = ViewModelProvider(this, MainActivityModelFactory(application, this))[MainActivityModel::class.java]
+        setContentView(binding.root)
+        setSupportActionBar(binding.toolbar)
+        initCredentialsRecycler()
+        initUserRecycler()
         binding.credentialsAddFab.setOnClickListener { showEditCredentialsScreen(null) }
         FamiliarApp.instance.addAppShowObserver(this)
         initAppBarBehaviour()
+        binding.appBar.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
+            binding.userView.alpha = 1 - abs(verticalOffset / appBarLayout.totalScrollRange.toFloat())
+        }
     }
 
     override fun onDestroy() {
@@ -149,7 +198,7 @@ class MainActivity : AppCompatActivity(), MainModelCallback, CredentialsItemCall
                     @EditResultAction val action =
                         data.getIntExtra(KEY_EDIT_RESULT_ACTION, EditResultAction.UNDEFINED)
                     if (action == EditResultAction.CREATE) {
-                        adapter?.let {
+                        credentialsAdapter?.let {
                             binding.credentialsRecycler.scrollToPosition(it.itemCount - 1)
                         }
                     }
@@ -162,6 +211,7 @@ class MainActivity : AppCompatActivity(), MainModelCallback, CredentialsItemCall
         val inflater = menuInflater
         inflater.inflate(R.menu.main_menu, menu)
         appBarMenu = menu
+        userMenuItem = menu.findItem(R.id.user)
         val searchManager = getSystemService(SEARCH_SERVICE) as SearchManager
         val searchMenuItem = menu.findItem(R.id.search)
         val searchView = searchMenuItem.actionView as SearchView
@@ -173,19 +223,24 @@ class MainActivity : AppCompatActivity(), MainModelCallback, CredentialsItemCall
             }
 
             override fun onQueryTextChange(query: String): Boolean {
-                adapter?.setFilterQuery(query.lowercase(Locale.getDefault()))
+                credentialsAdapter?.setFilterQuery(query.lowercase(Locale.getDefault()))
                 return false
             }
         })
         searchMenuItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
             override fun onMenuItemActionExpand(item: MenuItem): Boolean {
                 binding.credentialsAddFab.hide()
+                userMenuItem?.isVisible = false
                 return true
             }
 
             override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
                 binding.credentialsAddFab.show()
-                adapter?.setFilterQuery(null)
+                handler.post {
+                    userMenuItem?.isVisible = true
+                }
+
+                credentialsAdapter?.setFilterQuery(null)
                 return true
             }
         })
@@ -196,24 +251,24 @@ class MainActivity : AppCompatActivity(), MainModelCallback, CredentialsItemCall
         openLinkExternally(this, link)
     }
 
-    override fun onEditClick(item: CredentialsItem) {
+    override fun onEditClick(item: ICredentials) {
         showEditCredentialsScreen(item)
     }
 
-    override fun onOrderChanged(items: List<CredentialsItem>) {}
+    override fun onOrderChanged(items: List<ICredentials>) {}
 
-    override fun onShare(item: CredentialsItem) {
+    override fun onShare(item: ICredentials) {
         share(this, fromCredentials(item))
     }
 
-    private fun showEditCredentialsScreen(item: CredentialsItem?) {
+    private fun showEditCredentialsScreen(item: ICredentials?) {
         val intent = Intent(this, CredentialsEditActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         if (item != null) {
             intent.putExtra(KEY_ID, item.id)
             intent.putExtra(KEY_POSITION, item.position)
         } else {
-            intent.putExtra(KEY_POSITION, adapter?.baseItemCount)
+            intent.putExtra(KEY_POSITION, credentialsAdapter?.baseItemCount)
         }
         startActivityForResult(intent, REQUEST_CODE_EDIT)
     }
@@ -226,7 +281,7 @@ class MainActivity : AppCompatActivity(), MainModelCallback, CredentialsItemCall
     override fun onItemSelected() {}
 
     override fun onItemClear() {
-        adapter?.items?.let { model.handleOrderChanged(it) }
+        credentialsAdapter?.items?.let { model.handleOrderChanged(it) }
     }
 
     override fun run() {
@@ -243,9 +298,6 @@ class MainActivity : AppCompatActivity(), MainModelCallback, CredentialsItemCall
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.user) {
-//            val intent = Intent(this, UserActivity::class.java)
-//            startActivity(intent)
-            UserControl.setRandomUser()
             applyExpandedState()
         }
         return super.onOptionsItemSelected(item)

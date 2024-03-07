@@ -1,4 +1,4 @@
-package com.mirash.familiar.model
+package com.mirash.familiar.model.credentials
 
 import com.mirash.familiar.tool.listener.Filterable
 

@@ -1,4 +1,4 @@
-package com.mirash.familiar.activity.main.adapter
+package com.mirash.familiar.activity.main.credentials
 
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView

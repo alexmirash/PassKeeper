@@ -1,4 +1,4 @@
-package com.mirash.familiar.activity.main.adapter
+package com.mirash.familiar.activity.main.credentials
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.CompoundButton
 import androidx.recyclerview.widget.RecyclerView
 import com.mirash.familiar.databinding.CredentialsItemViewBinding
-import com.mirash.familiar.model.CredentialsItem
+import com.mirash.familiar.model.credentials.CredentialsItem
 import com.mirash.familiar.motion.ItemTouchHelperAdapter
 import java.util.Collections
 
@@ -86,6 +86,8 @@ class CredentialsAdapter(
         }
         holder.binding.itemPinText.text = pin
         holder.binding.itemEditButton.setOnClickListener { callback.onEditClick(item) }
+        holder.binding.itemPasswordVisibilityCheckbox.setOnCheckedChangeListener(null)
+        holder.binding.itemPasswordVisibilityCheckbox.isChecked = item.isPasswordVisible
         holder.binding.itemPasswordVisibilityCheckbox.setOnCheckedChangeListener { _: CompoundButton, checked: Boolean ->
             items[position].isPasswordVisible = checked
             notifyItemChanged(position, checked)

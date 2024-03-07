@@ -8,7 +8,7 @@ import java.lang.ref.WeakReference
 /**
  * @author Mirash
  */
-class MainViewModelFactory(
+class MainActivityModelFactory(
     private val application: Application,
     callback: MainModelCallback
 ) : ViewModelProvider.NewInstanceFactory() {

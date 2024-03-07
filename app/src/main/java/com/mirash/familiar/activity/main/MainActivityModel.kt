@@ -11,7 +11,7 @@ import com.mirash.familiar.eventmanager.EventManager
 import com.mirash.familiar.eventmanager.event.DataEvent
 import com.mirash.familiar.eventmanager.subscribe
 import com.mirash.familiar.eventmanager.subscription.Subscription
-import com.mirash.familiar.model.CredentialsItem
+import com.mirash.familiar.model.credentials.CredentialsItem
 import com.mirash.familiar.tool.AppEventType
 import com.mirash.familiar.user.TAG_USER
 import kotlinx.coroutines.Dispatchers

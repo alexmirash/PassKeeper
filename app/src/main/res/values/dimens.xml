@@ -4,6 +4,9 @@
     <dimen name="half_padding">8dp</dimen>
     <dimen name="quarter_padding">4dp</dimen>
     <dimen name="small_padding">12dp</dimen>
+    <dimen name="double_padding">32dp</dimen>
+    <dimen name="triple_padding">48dp</dimen>
+    <dimen name="quadruple_padding">64dp</dimen>
     <dimen name="main_bottom_padding">96dp</dimen>
 
     <!-- text sizes -->
@@ -18,4 +21,7 @@
 
     <dimen name="app_bar_height">200dp</dimen>
     <dimen name="pin_input_button_horizontal_space">24dp</dimen>
+    <dimen name="pin_input_view_margin_bottom">60dp</dimen>
+
+    <dimen name="user_item_height">40dp</dimen>
 </resources>

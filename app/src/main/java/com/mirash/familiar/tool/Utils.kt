@@ -15,7 +15,7 @@ import com.google.android.material.textfield.TextInputLayout
 import com.mirash.familiar.BuildConfig
 import com.mirash.familiar.FamiliarApp.Companion.instance
 import com.mirash.familiar.R
-import com.mirash.familiar.model.ICredentials
+import com.mirash.familiar.model.credentials.ICredentials
 import java.util.Locale
 import java.util.concurrent.TimeUnit
 
@@ -122,10 +122,6 @@ fun fromCredentials(credentials: ICredentials): String {
 
 fun isPinCodeActual(pinCode: String?): Boolean {
     return pinCode != null && pinCode.length == PIN_CODE_SIZE
-}
-
-fun isStringAlike(value: String?, query: String?): Boolean {
-    return value != null && value.lowercase(Locale.getDefault()).contains(query!!)
 }
 
 private fun createFile(activity: Activity) {

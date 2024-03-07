@@ -7,8 +7,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import com.mirash.familiar.db.Credentials
 import com.mirash.familiar.db.RepositoryProvider.credentialsRepository
-import com.mirash.familiar.model.CredentialsModel
-import com.mirash.familiar.model.ICredentials
+import com.mirash.familiar.model.credentials.CredentialsModel
+import com.mirash.familiar.model.credentials.ICredentials
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking

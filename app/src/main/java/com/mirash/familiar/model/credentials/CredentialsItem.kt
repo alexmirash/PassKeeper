@@ -1,11 +1,9 @@
-package com.mirash.familiar.model
-
-import com.mirash.familiar.db.Credentials
+package com.mirash.familiar.model.credentials
 
 /**
  * @author Mirash
  */
-class CredentialsItem(private val credentials: Credentials) : ICredentials {
+class CredentialsItem(private val credentials: ICredentials) : ICredentials {
     var isPasswordVisible = false
 
     override val title: String?

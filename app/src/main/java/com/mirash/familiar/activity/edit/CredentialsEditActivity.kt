@@ -12,7 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.mirash.familiar.R
 import com.mirash.familiar.databinding.ActivityCredentialsEditBinding
 import com.mirash.familiar.db.Credentials
-import com.mirash.familiar.model.CredentialsModel
+import com.mirash.familiar.model.credentials.CredentialsModel
 import com.mirash.familiar.tool.EditResultAction
 import com.mirash.familiar.tool.KEY_EDIT_RESULT_ACTION
 import com.mirash.familiar.tool.KEY_ID
