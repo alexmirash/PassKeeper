@@ -10,5 +10,4 @@ interface CredentialsItemCallback : OnStartDragListener {
     fun onLinkClick(link: String)
     fun onEditClick(item: ICredentials)
     fun onOrderChanged(items: List<ICredentials>)
-    fun onShare(item: ICredentials)
 }

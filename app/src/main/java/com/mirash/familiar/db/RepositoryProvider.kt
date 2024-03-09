@@ -49,7 +49,7 @@ fun logUserCredentialsSync() {
             Log.d(TAG_DB, "${data.user.id}, ${data.user.name}: ${c.userId}, ${c.title}")
         }
     }
-    for (data in RepositoryProvider.credentialsRepository.getAllCredentialsSync()) {
+    for (data in RepositoryProvider.credentialsRepository.getAllSync()) {
         Log.d(TAG_DB, "${data.userId}, ${data.title}")
     }
 }

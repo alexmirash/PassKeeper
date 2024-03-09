@@ -25,8 +25,10 @@ const val KEY_EDIT_RESULT_ACTION = "edit_action"
 const val KEY_PIN_CODE = "pin"
 const val KEY_INVALID_INPUT_COUNT = "invalid_pin"
 const val KEY_USER_ID = "user_id"
-const val REQUEST_CODE_EDIT = 11
+const val REQUEST_CODE_CREDENTIALS_EDIT = 11
+const val REQUEST_CODE_USER_EDIT = 12
 const val PIN_CODE_SIZE = 4
+const val APP_BAR_USERS_MAX_VISIBLE_COUNT = 5
 val BACKGROUND_INACTIVITY_KILL_TIME =
     TimeUnit.SECONDS.toMillis((if (BuildConfig.DEBUG) 300 else 30).toLong()).toInt()
 const val INVALID_INPUT_NUKE_COUNT = 5

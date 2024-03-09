@@ -27,10 +27,15 @@
                 android:resource="@xml/searchable" />
         </activity>
         <activity
-            android:name=".activity.edit.CredentialsEditActivity"
+            android:name=".activity.edit.credentials.CredentialsEditActivity"
             android:exported="false"
-            android:windowSoftInputMode="adjustResize"
-            android:theme="@style/Familiar.NoActionBar" />
+            android:theme="@style/Familiar.NoActionBar"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activity.edit.user.UserEditActivity"
+            android:exported="false"
+            android:theme="@style/Familiar.NoActionBar"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".activity.pin.PinCodeEnterActivity"
             android:exported="false"

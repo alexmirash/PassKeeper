@@ -65,8 +65,9 @@ object UserControl {
                     if (users.isEmpty()) {
                         Log.d(TAG_USER, "users do not exist! create default user")
                         applyUserId(createUser())
-                        createUser("A")
-                        createUser("B")
+                        for (index in 1..10) {
+                            createUser("User_$index")
+                        }
                         logUserCredentialsSync()
                     } else {
                         Log.d(TAG_USER, "usersSize = ${users.size}, apply 0")
@@ -103,7 +104,7 @@ object UserControl {
 
     fun getTestPredefinedCredentials(userId: Long, name: String): List<Credentials> {
         val list = ArrayList<Credentials>()
-        val count = 5 * (1 + userId % 2)
+        val count = Random.nextInt(2, 50)
         for (i in 0 until count) {
             val credentials = Credentials(userId)
             credentials.title = "${name}_title_$i"

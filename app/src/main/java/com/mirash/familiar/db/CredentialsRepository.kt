@@ -6,8 +6,26 @@ import com.mirash.familiar.user.UserControl
 /**
  * @author Mirash
  */
-class CredentialsRepository(database: FamiliarDatabase) {
+class CredentialsRepository(database: FamiliarDatabase) : IRepository<Credentials> {
     private val dao: CredentialsDao = database.getCredentialsDao()
+
+    override fun insert(entity: Credentials): Long = dao.insert(entity)
+
+    override fun update(entity: Credentials) {
+        dao.update(entity)
+    }
+
+    override fun delete(entity: Credentials) {
+        dao.delete(entity)
+    }
+
+    override fun deleteById(id: Long) {
+        dao.deleteById(id)
+    }
+
+    override fun getById(id: Long): LiveData<Credentials> = dao.getById(id)
+
+    override fun getByIdSync(id: Long): Credentials? = dao.getByIdSync(id)
 
     fun insertAll(credentialsList: List<Credentials>) {
         dao.insertAll(credentialsList)
@@ -17,32 +35,17 @@ class CredentialsRepository(database: FamiliarDatabase) {
         dao.updateAll(credentialsList)
     }
 
-    fun insert(credentials: Credentials) {
-        dao.insert(credentials)
-    }
 
-    fun update(credentials: Credentials) {
-        dao.update(credentials)
-    }
+    fun getAll(): LiveData<List<Credentials>> = dao.getAll()
 
-    fun getAllCredentials(): LiveData<List<Credentials>> = dao.getAll()
+    fun getAllSync(): List<Credentials> = dao.getAllSync()
 
-    fun getAllCredentialsSync(): List<Credentials> = dao.getAllSync()
-
-    fun getAllCredentialsByUserId(userId: Long = UserControl.userId): LiveData<List<Credentials>> =
+    fun getAllByUserId(userId: Long): LiveData<List<Credentials>> =
         dao.getAllByUserId(userId)
-
-    fun getCredentialsById(id: Long): LiveData<Credentials> = dao.getById(id)
-
-    fun getCredentialsByIdSync(id: Long): Credentials = dao.getByIdSync(id)
 
     fun getCredentialsUnderPositionByUserIdSync(
         position: Int,
         userId: Long = UserControl.userId
     ): List<Credentials> =
         dao.getCredentialsUnderPositionByUserIdSync(position, userId)
-
-    fun deleteCredentialsById(id: Long) {
-        dao.deleteById(id)
-    }
 }

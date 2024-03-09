@@ -23,7 +23,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.AppBarLayout
 import com.mirash.familiar.FamiliarApp
 import com.mirash.familiar.R
-import com.mirash.familiar.activity.edit.CredentialsEditActivity
+import com.mirash.familiar.activity.edit.credentials.CredentialsEditActivity
+import com.mirash.familiar.activity.edit.user.UserEditActivity
 import com.mirash.familiar.activity.main.credentials.CredentialsAdapter
 import com.mirash.familiar.activity.main.credentials.CredentialsItemCallback
 import com.mirash.familiar.activity.main.user.UserAdapter
@@ -38,23 +39,25 @@ import com.mirash.familiar.model.user.UserItem
 import com.mirash.familiar.motion.ItemTouchStateCallback
 import com.mirash.familiar.motion.OnStartDragListener
 import com.mirash.familiar.motion.SimpleItemTouchHelperCallback
+import com.mirash.familiar.tool.APP_BAR_USERS_MAX_VISIBLE_COUNT
 import com.mirash.familiar.tool.AppBarCollapseStateChangeListener
 import com.mirash.familiar.tool.BACKGROUND_INACTIVITY_KILL_TIME
 import com.mirash.familiar.tool.EditResultAction
 import com.mirash.familiar.tool.KEY_EDIT_RESULT_ACTION
 import com.mirash.familiar.tool.KEY_ID
 import com.mirash.familiar.tool.KEY_POSITION
-import com.mirash.familiar.tool.REQUEST_CODE_EDIT
+import com.mirash.familiar.tool.REQUEST_CODE_CREDENTIALS_EDIT
+import com.mirash.familiar.tool.REQUEST_CODE_USER_EDIT
 import com.mirash.familiar.tool.decoration.DividerListItemDecoration
 import com.mirash.familiar.tool.decoration.VerticalBottomSpaceItemDecoration
-import com.mirash.familiar.tool.fromCredentials
 import com.mirash.familiar.tool.listener.AppShowObserver
 import com.mirash.familiar.tool.openLinkExternally
-import com.mirash.familiar.tool.share
 import com.mirash.familiar.user.TAG_USER
 import com.mirash.familiar.user.UserControl
 import java.util.Locale
 import kotlin.math.abs
+import kotlin.math.min
+import kotlin.math.roundToInt
 
 
 /**
@@ -72,7 +75,9 @@ class MainActivity : AppCompatActivity(), MainModelCallback, CredentialsItemCall
     private var isBackPressedOnce = false
     private var isAppBarExpanded = false
     private var appBarMenu: Menu? = null
-    private var userMenuItem: MenuItem? = null
+    private lateinit var userMenuItem: MenuItem
+    private var userAddMenuItem: MenuItem? = null
+    private var searchMenuItem: MenuItem? = null
 
     private val userObserver: Observer<User> = Observer { value ->
         Log.d(TAG_USER, "onUserChanged: ${value.id} ${value.name}")
@@ -116,6 +121,20 @@ class MainActivity : AppCompatActivity(), MainModelCallback, CredentialsItemCall
         )
     }
 
+    private fun updateAppBarHeight(count: Int) {
+        val height: Int =
+            (min(APP_BAR_USERS_MAX_VISIBLE_COUNT, count) * resources.getDimension(R.dimen.user_item_height) +
+                    resources.getDimension(R.dimen.half_padding) +
+                    binding.toolbar.height).roundToInt()
+        binding.appBar.layoutParams.let {
+            if (it.height != height) {
+                it.height = height
+                binding.appBar.requestLayout()
+                applyExpandedState(expanded = isAppBarExpanded, animate = false)
+            }
+        }
+    }
+
     private fun initUserRecycler() {
         binding.userRecycler.layoutManager = LinearLayoutManager(this)
         binding.userRecycler.addItemDecoration(
@@ -129,7 +148,8 @@ class MainActivity : AppCompatActivity(), MainModelCallback, CredentialsItemCall
             for (user in users) {
                 items.add(UserItem(user))
             }
-            binding.credentialsRecycler.adapter?.let { adapter ->
+            updateAppBarHeight(items.size)
+            binding.userRecycler.adapter?.let { adapter ->
                 (adapter as UserAdapter).items = items
             } ?: run {
                 val adapter = UserAdapter(
@@ -139,6 +159,7 @@ class MainActivity : AppCompatActivity(), MainModelCallback, CredentialsItemCall
                         }
 
                         override fun onEditClick(item: IUser) {
+                            showEditUserScreen(item)
                         }
                     }
                 )
@@ -159,6 +180,7 @@ class MainActivity : AppCompatActivity(), MainModelCallback, CredentialsItemCall
         binding.credentialsAddFab.setOnClickListener { showEditCredentialsScreen(null) }
         FamiliarApp.instance.addAppShowObserver(this)
         initAppBarBehaviour()
+        //TODO check
         binding.appBar.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
             binding.userView.alpha = 1 - abs(verticalOffset / appBarLayout.totalScrollRange.toFloat())
         }
@@ -192,7 +214,7 @@ class MainActivity : AppCompatActivity(), MainModelCallback, CredentialsItemCall
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_CODE_EDIT) {
+        if (requestCode == REQUEST_CODE_CREDENTIALS_EDIT) {
             if (resultCode == RESULT_OK) {
                 if (data != null) {
                     @EditResultAction val action =
@@ -212,8 +234,10 @@ class MainActivity : AppCompatActivity(), MainModelCallback, CredentialsItemCall
         inflater.inflate(R.menu.main_menu, menu)
         appBarMenu = menu
         userMenuItem = menu.findItem(R.id.user)
+        userAddMenuItem = menu.findItem(R.id.user_add)
         val searchManager = getSystemService(SEARCH_SERVICE) as SearchManager
         val searchMenuItem = menu.findItem(R.id.search)
+        this.searchMenuItem = searchMenuItem
         val searchView = searchMenuItem.actionView as SearchView
         searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName))
         searchView.maxWidth = Int.MAX_VALUE
@@ -230,21 +254,27 @@ class MainActivity : AppCompatActivity(), MainModelCallback, CredentialsItemCall
         searchMenuItem.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
             override fun onMenuItemActionExpand(item: MenuItem): Boolean {
                 binding.credentialsAddFab.hide()
-                userMenuItem?.isVisible = false
+                userMenuItem.isVisible = false
                 return true
             }
 
             override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
                 binding.credentialsAddFab.show()
                 handler.post {
-                    userMenuItem?.isVisible = true
+                    userMenuItem.isVisible = true
                 }
-
                 credentialsAdapter?.setFilterQuery(null)
                 return true
             }
         })
         return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.user) {
+            applyExpandedState()
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onLinkClick(link: String) {
@@ -257,10 +287,6 @@ class MainActivity : AppCompatActivity(), MainModelCallback, CredentialsItemCall
 
     override fun onOrderChanged(items: List<ICredentials>) {}
 
-    override fun onShare(item: ICredentials) {
-        share(this, fromCredentials(item))
-    }
-
     private fun showEditCredentialsScreen(item: ICredentials?) {
         val intent = Intent(this, CredentialsEditActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
@@ -270,7 +296,16 @@ class MainActivity : AppCompatActivity(), MainModelCallback, CredentialsItemCall
         } else {
             intent.putExtra(KEY_POSITION, credentialsAdapter?.baseItemCount)
         }
-        startActivityForResult(intent, REQUEST_CODE_EDIT)
+        startActivityForResult(intent, REQUEST_CODE_CREDENTIALS_EDIT)
+    }
+
+    private fun showEditUserScreen(item: IUser?) {
+        val intent = Intent(this, UserEditActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        if (item != null) {
+            intent.putExtra(KEY_ID, item.id)
+        }
+        startActivityForResult(intent, REQUEST_CODE_USER_EDIT)
     }
 
     //not used
@@ -296,13 +331,6 @@ class MainActivity : AppCompatActivity(), MainModelCallback, CredentialsItemCall
         handler.removeCallbacks(this)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.user) {
-            applyExpandedState()
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
     private fun initAppBarBehaviour() {
         binding.appBar.addOnOffsetChangedListener(object : AppBarCollapseStateChangeListener() {
             override fun onStateChanged(state: State) {
@@ -320,12 +348,16 @@ class MainActivity : AppCompatActivity(), MainModelCallback, CredentialsItemCall
                 return false
             }
         })
-        applyExpandedState(false)
+//        handler.post {
+//            applyExpandedState(expanded = false, animate = false)
+//        }
     }
 
-    private fun applyExpandedState(expanded: Boolean = !isAppBarExpanded) {
-        binding.appBar.setExpanded(expanded)
+    private fun applyExpandedState(expanded: Boolean = !isAppBarExpanded, animate: Boolean = true) {
+        binding.appBar.setExpanded(expanded, animate)
         isAppBarExpanded = expanded
+        searchMenuItem?.isVisible = !expanded
+        userAddMenuItem?.isVisible = expanded
     }
 
     override fun setUserObservers(user: LiveData<User>, credentials: LiveData<List<Credentials>>) {

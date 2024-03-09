@@ -11,6 +11,7 @@
     <string name="details">Details</string>
     <string name="save">Save</string>
     <string name="delete">Delete</string>
+    <string name="share">Share</string>
     <string name="search">Search</string>
     <string name="done">Done</string>
     <string name="cancel">Cancel</string>
@@ -26,4 +27,6 @@
     <string name="bio_login_title">Biometric login</string>
     <string name="bio_login_message">Log in your biometric credential</string>
     <string name="user">User</string>
+    <string name="add_user">Add User</string>
+    <string name="name">Name</string>
 </resources>

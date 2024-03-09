@@ -8,7 +8,7 @@ import com.mirash.familiar.model.user.UserModel
  * @author Mirash
  */
 @Entity
-class User(name: String) : UserModel(name) {
+class User(name: String = "") : UserModel(name) {
     @PrimaryKey(autoGenerate = true)
     override var id: Long = 0
 }

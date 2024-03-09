@@ -92,7 +92,6 @@ class CredentialsAdapter(
             items[position].isPasswordVisible = checked
             notifyItemChanged(position, checked)
         }
-        holder.binding.itemShareButton.setOnClickListener { callback.onShare(item) }
         //drag
         holder.itemView.setOnLongClickListener {
             if (filterQuery.isNullOrEmpty()) callback.onDragStart(holder)

@@ -25,7 +25,7 @@ interface CredentialsDao {
     fun getById(id: Long): LiveData<Credentials>
 
     @Query("SELECT * FROM Credentials WHERE id= :id")
-    fun getByIdSync(id: Long): Credentials
+    fun getByIdSync(id: Long): Credentials?
 
     @Query("DELETE FROM Credentials WHERE id = :id")
     fun deleteById(id: Long)
@@ -37,7 +37,7 @@ interface CredentialsDao {
     fun insertAll(entries: List<Credentials>)
 
     @Insert
-    fun insert(credentials: Credentials)
+    fun insert(credentials: Credentials): Long
 
     @Update
     fun update(credentials: Credentials)

@@ -40,7 +40,10 @@ interface UserDao {
     fun update(user: User)
 
     @Delete
-    fun delete(user: User)
+    fun deleteById(user: User)
+
+    @Query("DELETE FROM User WHERE id = :id")
+    fun deleteById(id: Long)
 
     @Query("DELETE FROM User")
     fun deleteAll()
