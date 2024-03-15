@@ -2,13 +2,17 @@ package com.mirash.familiar.activity.edit.credentials
 
 import android.os.Bundle
 import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.mirash.familiar.activity.edit.base.BaseEditActivity
 import com.mirash.familiar.databinding.ActivityCredentialsEditBinding
 import com.mirash.familiar.db.Credentials
+import com.mirash.familiar.db.RepositoryProvider
+import com.mirash.familiar.db.User
 import com.mirash.familiar.model.credentials.CredentialsModel
 import com.mirash.familiar.model.credentials.ICredentials
 import com.mirash.familiar.tool.KEY_POSITION
+import com.mirash.familiar.user.UserControl
 
 /**
  * @author Mirash
@@ -20,6 +24,21 @@ class CredentialsEditActivity :
         super.applyIntentExtras(bundle)
         val position = intent.getIntExtra(KEY_POSITION, 0)
         model.credentialsPosition = position
+    }
+
+    override fun onCreateNewDataMode() {
+        val liveData = RepositoryProvider.userRepository.getById(UserControl.userId)
+        liveData.observe(this, object : Observer<User> {
+            override fun onChanged(value: User) {
+                liveData.removeObserver(this)
+                binding.itemEmailInput.let {
+                    if (it.text.isNullOrEmpty()) it.text = value.email
+                }
+                binding.itemPhoneInput.let {
+                    if (it.text.isNullOrEmpty()) it.text = value.phone
+                }
+            }
+        })
     }
 
     override fun initViewBinding(): ActivityCredentialsEditBinding =

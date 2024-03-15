@@ -33,8 +33,12 @@ abstract class BaseEditActivity<I, E : I, M : BaseEditViewModel<I, E>, B : ViewB
         setSupportActionBar(toolbar())
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         model = initViewModel()
-        intent.extras?.let {
-            applyIntentExtras(it)
+        intent.extras.let {
+            if (it == null) {
+                onCreateNewDataMode()
+            } else {
+                applyIntentExtras(it)
+            }
         }
         initSaveButtonStateObserver()
     }
@@ -45,8 +49,12 @@ abstract class BaseEditActivity<I, E : I, M : BaseEditViewModel<I, E>, B : ViewB
             val id = bundle.getLong(KEY_ID, 0)
             model.setId(id)
             model.liveData?.observe(this, this)
+        } else {
+            onCreateNewDataMode()
         }
     }
+
+    protected open fun onCreateNewDataMode() {}
 
     protected abstract fun initViewBinding(): B
 

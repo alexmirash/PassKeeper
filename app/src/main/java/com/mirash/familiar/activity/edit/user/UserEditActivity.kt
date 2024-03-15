@@ -21,7 +21,10 @@ class UserEditActivity : BaseEditActivity<IUser, User, UserEditViewModel, Activi
     override fun toolbar(): Toolbar = binding.userToolbar
 
     override fun createData(): IUser {
-        return UserModel(binding.userNameInput.text ?: "")
+        val user = UserModel(binding.userNameInput.text ?: "")
+        user.email = binding.userEmailInput.text
+        user.phone = binding.userPhoneInput.text
+        return user
     }
 
     override fun isHideDeleteMenuItem(): Boolean {
@@ -30,6 +33,8 @@ class UserEditActivity : BaseEditActivity<IUser, User, UserEditViewModel, Activi
 
     override fun onChanged(value: User) {
         binding.userNameInput.setTextWithNoAnimation(value.name)
+        binding.userEmailInput.setTextWithNoAnimation(value.email)
+        binding.userPhoneInput.setTextWithNoAnimation(value.phone)
     }
 
     override fun initSaveButtonStateObserver() {

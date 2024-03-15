@@ -40,7 +40,6 @@ import com.mirash.familiar.motion.ItemTouchStateCallback
 import com.mirash.familiar.motion.OnStartDragListener
 import com.mirash.familiar.motion.SimpleItemTouchHelperCallback
 import com.mirash.familiar.tool.APP_BAR_USERS_MAX_VISIBLE_COUNT
-import com.mirash.familiar.tool.AppBarCollapseStateChangeListener
 import com.mirash.familiar.tool.BACKGROUND_INACTIVITY_KILL_TIME
 import com.mirash.familiar.tool.EditResultAction
 import com.mirash.familiar.tool.KEY_EDIT_RESULT_ACTION
@@ -82,9 +81,8 @@ class MainActivity : AppCompatActivity(), MainModelCallback, CredentialsItemCall
     private val userObserver: Observer<User> = Observer { value ->
         Log.d(TAG_USER, "onUserChanged: ${value.id} ${value.name}")
         userAdapter?.setCheckedItem(value.id)
-        runOnUiThread {
-            binding.userTitle.text = value.name
-        }
+        binding.userTitle.text = value.name
+        applyExpandedState(false)
     }
 
     private val credentialsObserver: Observer<List<Credentials>> = object : Observer<List<Credentials>> {
@@ -180,7 +178,6 @@ class MainActivity : AppCompatActivity(), MainModelCallback, CredentialsItemCall
         binding.credentialsAddFab.setOnClickListener { showEditCredentialsScreen(null) }
         FamiliarApp.instance.addAppShowObserver(this)
         initAppBarBehaviour()
-        //TODO check
         binding.appBar.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
             binding.userView.alpha = 1 - abs(verticalOffset / appBarLayout.totalScrollRange.toFloat())
         }
@@ -332,13 +329,13 @@ class MainActivity : AppCompatActivity(), MainModelCallback, CredentialsItemCall
     }
 
     private fun initAppBarBehaviour() {
-        binding.appBar.addOnOffsetChangedListener(object : AppBarCollapseStateChangeListener() {
-            override fun onStateChanged(state: State) {
-                if (state == State.COLLAPSED) {
-                } else if (state == State.EXPANDED) {
-                }
-            }
-        })
+//        binding.appBar.addOnOffsetChangedListener(object : AppBarCollapseStateChangeListener() {
+//            override fun onStateChanged(state: State) {
+//                if (state == State.COLLAPSED) {
+//                } else if (state == State.EXPANDED) {
+//                }
+//            }
+//        })
         ViewCompat.setNestedScrollingEnabled(binding.credentialsRecycler, false)
         val params = binding.appBar.layoutParams as CoordinatorLayout.LayoutParams
         if (params.behavior == null) params.behavior = AppBarLayout.Behavior()
@@ -348,9 +345,6 @@ class MainActivity : AppCompatActivity(), MainModelCallback, CredentialsItemCall
                 return false
             }
         })
-//        handler.post {
-//            applyExpandedState(expanded = false, animate = false)
-//        }
     }
 
     private fun applyExpandedState(expanded: Boolean = !isAppBarExpanded, animate: Boolean = true) {

@@ -18,5 +18,7 @@ class UserEditViewModel(application: Application) : BaseEditViewModel<IUser, Use
 
     override fun fill(from: IUser, to: User) {
         to.name = from.name
+        to.email = from.email
+        to.phone = from.phone
     }
 }

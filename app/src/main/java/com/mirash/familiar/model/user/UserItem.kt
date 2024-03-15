@@ -10,4 +10,8 @@ class UserItem(private val user: IUser, var isChecked: Boolean = user.id == User
         get() = user.id
     override val name: String
         get() = user.name
+    override val email: String?
+        get() = user.email
+    override val phone: String?
+        get() = user.phone
 }

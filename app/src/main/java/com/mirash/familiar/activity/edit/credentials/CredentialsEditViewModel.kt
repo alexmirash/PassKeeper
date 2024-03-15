@@ -23,7 +23,6 @@ class CredentialsEditViewModel(application: Application) :
         const val INDEX_PIN = 6
     }
 
-
     private val fillStates = booleanArrayOf(false, false, false, false, false, false, false)
     var credentialsPosition = 0
 
