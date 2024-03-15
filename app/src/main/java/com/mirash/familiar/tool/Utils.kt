@@ -13,9 +13,6 @@ import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.textfield.TextInputLayout
 import com.mirash.familiar.BuildConfig
-import com.mirash.familiar.FamiliarApp.Companion.instance
-import com.mirash.familiar.R
-import com.mirash.familiar.model.credentials.ICredentials
 import java.util.Locale
 import java.util.concurrent.TimeUnit
 
@@ -25,8 +22,6 @@ const val KEY_EDIT_RESULT_ACTION = "edit_action"
 const val KEY_PIN_CODE = "pin"
 const val KEY_INVALID_INPUT_COUNT = "invalid_pin"
 const val KEY_USER_ID = "user_id"
-const val REQUEST_CODE_CREDENTIALS_EDIT = 11
-const val REQUEST_CODE_USER_EDIT = 12
 const val PIN_CODE_SIZE = 4
 const val APP_BAR_USERS_MAX_VISIBLE_COUNT = 5
 val BACKGROUND_INACTIVITY_KILL_TIME =
@@ -95,31 +90,6 @@ fun share(activity: Activity, data: String?) {
     sendIntent.setType("text/*")
     val shareIntent = Intent.createChooser(sendIntent, null)
     activity.startActivity(shareIntent)
-}
-
-fun createMultiFieldString(vararg items: CharSequence?): String {
-    val builder = StringBuilder()
-    for (item in items) {
-        if (!item.isNullOrEmpty()) {
-            if (builder.isNotEmpty()) builder.append("\n")
-            builder.append(item)
-        }
-    }
-    return builder.toString()
-}
-
-fun fromCredentials(credentials: ICredentials): String {
-    val res = instance.resources
-    return createMultiFieldString(
-        credentials.title,
-        credentials.link,
-        LabelString(res.getString(R.string.login), credentials.login),
-        LabelString(res.getString(R.string.email), credentials.email),
-        LabelString(res.getString(R.string.phone), credentials.phone),
-        LabelString(res.getString(R.string.password), credentials.password),
-        LabelString(res.getString(R.string.pin), credentials.pin),
-        credentials.details
-    )
 }
 
 fun isPinCodeActual(pinCode: String?): Boolean {

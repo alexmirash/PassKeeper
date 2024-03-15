@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mirash.familiar.R
 import com.mirash.familiar.databinding.UserItemViewBinding
 import com.mirash.familiar.model.user.UserItem
+import com.mirash.familiar.tool.listener.IScrollProvider
 
 /**
  * @author Mirash
@@ -17,12 +18,14 @@ import com.mirash.familiar.model.user.UserItem
 @SuppressLint("NotifyDataSetChanged")
 class UserAdapter(
     users: List<UserItem>, private val callback: UserItemCallback
-) : RecyclerView.Adapter<UserItemHolder>() {
+) : RecyclerView.Adapter<UserItemHolder>(), IScrollProvider {
     var items: List<UserItem> = users
         set(value) {
             field = value
             notifyDataSetChanged()
         }
+
+    override var isScrollToBottom: Boolean = false
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserItemHolder {
         return UserItemHolder(
@@ -52,7 +55,7 @@ class UserAdapter(
             callback.onEditClick(item)
         }
         holder.binding.root.setOnClickListener {
-            callback.onChecked(item)
+            callback.onItemClick(item)
         }
     }
 

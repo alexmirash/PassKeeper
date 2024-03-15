@@ -10,6 +10,9 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -45,11 +48,10 @@ import com.mirash.familiar.tool.EditResultAction
 import com.mirash.familiar.tool.KEY_EDIT_RESULT_ACTION
 import com.mirash.familiar.tool.KEY_ID
 import com.mirash.familiar.tool.KEY_POSITION
-import com.mirash.familiar.tool.REQUEST_CODE_CREDENTIALS_EDIT
-import com.mirash.familiar.tool.REQUEST_CODE_USER_EDIT
 import com.mirash.familiar.tool.decoration.DividerListItemDecoration
 import com.mirash.familiar.tool.decoration.VerticalBottomSpaceItemDecoration
 import com.mirash.familiar.tool.listener.AppShowObserver
+import com.mirash.familiar.tool.listener.IScrollProvider
 import com.mirash.familiar.tool.openLinkExternally
 import com.mirash.familiar.user.TAG_USER
 import com.mirash.familiar.user.UserControl
@@ -77,12 +79,25 @@ class MainActivity : AppCompatActivity(), MainModelCallback, CredentialsItemCall
     private lateinit var userMenuItem: MenuItem
     private var userAddMenuItem: MenuItem? = null
     private var searchMenuItem: MenuItem? = null
+    private val userActivityLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result: ActivityResult ->
+        userAdapter?.let {
+            handleEditActivityResult(result, it)
+        }
+    }
+    private val credentialsActivityLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result: ActivityResult ->
+        credentialsAdapter?.let {
+            handleEditActivityResult(result, it)
+        }
+    }
 
     private val userObserver: Observer<User> = Observer { value ->
         Log.d(TAG_USER, "onUserChanged: ${value.id} ${value.name}")
         userAdapter?.setCheckedItem(value.id)
         binding.userTitle.text = value.name
-        applyExpandedState(false)
     }
 
     private val credentialsObserver: Observer<List<Credentials>> = object : Observer<List<Credentials>> {
@@ -92,8 +107,11 @@ class MainActivity : AppCompatActivity(), MainModelCallback, CredentialsItemCall
             for (credential in value) {
                 credentialsItems.add(CredentialsItem(credential))
             }
-            binding.credentialsRecycler.adapter?.let {
-                (it as CredentialsAdapter).setItems(credentialsItems)
+            credentialsAdapter?.let {
+                it.setItems(credentialsItems)
+                if (it.isScrollToBottom) {
+                    binding.credentialsRecycler.scrollToPosition(it.itemCount - 1)
+                }
             } ?: run {
                 val adapter = CredentialsAdapter(
                     credentialsItems, this@MainActivity
@@ -147,13 +165,17 @@ class MainActivity : AppCompatActivity(), MainModelCallback, CredentialsItemCall
                 items.add(UserItem(user))
             }
             updateAppBarHeight(items.size)
-            binding.userRecycler.adapter?.let { adapter ->
-                (adapter as UserAdapter).items = items
+            userAdapter?.let {
+                it.items = items
+                if (it.isScrollToBottom) {
+                    binding.userRecycler.scrollToPosition(it.itemCount - 1)
+                }
             } ?: run {
                 val adapter = UserAdapter(
                     items, object : UserItemCallback {
-                        override fun onChecked(item: IUser) {
+                        override fun onItemClick(item: IUser) {
                             UserControl.setUser(item.id)
+                            applyExpandedState(false)
                         }
 
                         override fun onEditClick(item: IUser) {
@@ -209,23 +231,6 @@ class MainActivity : AppCompatActivity(), MainModelCallback, CredentialsItemCall
         finishAndRemoveTask()
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_CODE_CREDENTIALS_EDIT) {
-            if (resultCode == RESULT_OK) {
-                if (data != null) {
-                    @EditResultAction val action =
-                        data.getIntExtra(KEY_EDIT_RESULT_ACTION, EditResultAction.UNDEFINED)
-                    if (action == EditResultAction.CREATE) {
-                        credentialsAdapter?.let {
-                            binding.credentialsRecycler.scrollToPosition(it.itemCount - 1)
-                        }
-                    }
-                }
-            }
-        }
-    }
-
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater = menuInflater
         inflater.inflate(R.menu.main_menu, menu)
@@ -268,8 +273,14 @@ class MainActivity : AppCompatActivity(), MainModelCallback, CredentialsItemCall
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.user) {
-            applyExpandedState()
+        when (item.itemId) {
+            R.id.user -> {
+                applyExpandedState()
+            }
+
+            R.id.user_add -> {
+                showEditUserScreen()
+            }
         }
         return super.onOptionsItemSelected(item)
     }
@@ -293,16 +304,16 @@ class MainActivity : AppCompatActivity(), MainModelCallback, CredentialsItemCall
         } else {
             intent.putExtra(KEY_POSITION, credentialsAdapter?.baseItemCount)
         }
-        startActivityForResult(intent, REQUEST_CODE_CREDENTIALS_EDIT)
+        credentialsActivityLauncher.launch(intent)
     }
 
-    private fun showEditUserScreen(item: IUser?) {
+    private fun showEditUserScreen(item: IUser? = null) {
         val intent = Intent(this, UserEditActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         if (item != null) {
             intent.putExtra(KEY_ID, item.id)
         }
-        startActivityForResult(intent, REQUEST_CODE_USER_EDIT)
+        userActivityLauncher.launch(intent)
     }
 
     //not used
@@ -352,6 +363,18 @@ class MainActivity : AppCompatActivity(), MainModelCallback, CredentialsItemCall
         isAppBarExpanded = expanded
         searchMenuItem?.isVisible = !expanded
         userAddMenuItem?.isVisible = expanded
+    }
+
+    private fun handleEditActivityResult(result: ActivityResult, scrollProvider: IScrollProvider) {
+        if (result.resultCode == RESULT_OK) {
+            result.data?.let { data ->
+                @EditResultAction val action =
+                    data.getIntExtra(KEY_EDIT_RESULT_ACTION, EditResultAction.UNDEFINED)
+                if (action == EditResultAction.CREATE) {
+                    scrollProvider.isScrollToBottom = true
+                }
+            }
+        }
     }
 
     override fun setUserObservers(user: LiveData<User>, credentials: LiveData<List<Credentials>>) {

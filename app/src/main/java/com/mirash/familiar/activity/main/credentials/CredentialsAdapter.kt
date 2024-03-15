@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mirash.familiar.databinding.CredentialsItemViewBinding
 import com.mirash.familiar.model.credentials.CredentialsItem
 import com.mirash.familiar.motion.ItemTouchHelperAdapter
+import com.mirash.familiar.tool.listener.IScrollProvider
 import java.util.Collections
 
 /**
@@ -17,13 +18,15 @@ import java.util.Collections
 @SuppressLint("NotifyDataSetChanged")
 class CredentialsAdapter(
     credentialsItems: MutableList<CredentialsItem>, private val callback: CredentialsItemCallback
-) : RecyclerView.Adapter<CredentialsItemHolder>(), ItemTouchHelperAdapter {
+) : RecyclerView.Adapter<CredentialsItemHolder>(), ItemTouchHelperAdapter, IScrollProvider {
     var items: MutableList<CredentialsItem> = credentialsItems
         private set
     private var baseItems: MutableList<CredentialsItem> = credentialsItems
     private var filterQuery: String? = null
     val baseItemCount: Int
         get() = baseItems.size
+
+    override var isScrollToBottom: Boolean = false
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CredentialsItemHolder {
         return CredentialsItemHolder(

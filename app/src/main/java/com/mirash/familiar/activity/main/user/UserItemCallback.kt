@@ -7,6 +7,6 @@ import com.mirash.familiar.model.user.IUser
  */
 interface UserItemCallback {
 
-    fun onChecked(item: IUser)
+    fun onItemClick(item: IUser)
     fun onEditClick(item: IUser)
 }
