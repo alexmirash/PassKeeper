@@ -1,6 +1,5 @@
 package com.mirash.familiar.activity.main
 
-import android.annotation.SuppressLint
 import android.app.SearchManager
 import android.content.Intent
 import android.os.Bundle
@@ -10,6 +9,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -203,32 +203,27 @@ class MainActivity : AppCompatActivity(), MainModelCallback, CredentialsItemCall
         binding.appBar.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
             binding.userView.alpha = 1 - abs(verticalOffset / appBarLayout.totalScrollRange.toFloat())
         }
+        onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (isBackPressedOnce) {
+                    isBackPressedOnce = false
+                    finishAndRemoveTask()
+                    return
+                }
+                isBackPressedOnce = true
+                Toast.makeText(
+                    this@MainActivity,
+                    getString(R.string.double_back_press_message),
+                    Toast.LENGTH_SHORT
+                ).show()
+                handler.postDelayed({ isBackPressedOnce = false }, 2000)
+            }
+        })
     }
 
     override fun onDestroy() {
         super.onDestroy()
         FamiliarApp.instance.removeAppShowObserver(this)
-    }
-
-    @SuppressLint("MissingSuperCall")
-    @Deprecated("Deprecated in Java")
-    override fun onBackPressed() {
-        if (isBackPressedOnce) {
-            isBackPressedOnce = false
-            onDoubleBackPressed()
-            return
-        }
-        isBackPressedOnce = true
-        onSingleBackPressed()
-        handler.postDelayed({ isBackPressedOnce = false }, 2000)
-    }
-
-    private fun onSingleBackPressed() {
-        Toast.makeText(this, getString(R.string.double_back_press_message), Toast.LENGTH_SHORT).show()
-    }
-
-    private fun onDoubleBackPressed() {
-        finishAndRemoveTask()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
