@@ -11,7 +11,7 @@ android {
     defaultConfig {
         applicationId "com.mirash.familiar"
         minSdk 27
-        targetSdk 34
+        targetSdk = 34
         versionCode 4
         versionName "1.4"
     }
@@ -19,12 +19,12 @@ android {
     buildTypes {
         debug {
             minifyEnabled false
-            resValue "string", "app_name", "(d) Familiar"
-            applicationIdSuffix ".debug"
+            resValue "string", "app_name", "Familiar"
+//            applicationIdSuffix ".debug"
         }
         release {
             minifyEnabled true
-            resValue "string", "app_name", "(d) Familiar"
+            resValue "string", "app_name", "Familiar"
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }

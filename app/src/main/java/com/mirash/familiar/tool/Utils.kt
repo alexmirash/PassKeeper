@@ -13,6 +13,9 @@ import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.textfield.TextInputLayout
 import com.mirash.familiar.BuildConfig
+import com.mirash.familiar.FamiliarApp.Companion.instance
+import com.mirash.familiar.R
+import com.mirash.familiar.model.credentials.ICredentials
 import java.util.Locale
 import java.util.concurrent.TimeUnit
 
@@ -119,4 +122,29 @@ fun getSystemVibrator(context: Context): Vibrator? {
         }
     }
     return null
+}
+
+fun createMultiFieldString(vararg items: CharSequence?): String {
+    val builder = StringBuilder()
+    for (item in items) {
+        if (!item.isNullOrEmpty()) {
+            if (builder.isNotEmpty()) builder.append("\n")
+            builder.append(item)
+        }
+    }
+    return builder.toString()
+}
+
+fun fromCredentials(credentials: ICredentials): String {
+    val res = instance.resources
+    return createMultiFieldString(
+        credentials.title,
+        credentials.link,
+        LabelString(res.getString(R.string.login), credentials.login),
+        LabelString(res.getString(R.string.email), credentials.email),
+        LabelString(res.getString(R.string.phone), credentials.phone),
+        LabelString(res.getString(R.string.password), credentials.password),
+        LabelString(res.getString(R.string.pin), credentials.pin),
+        credentials.details
+    )
 }

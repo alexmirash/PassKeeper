@@ -5,6 +5,7 @@ import com.mirash.familiar.tool.listener.Filterable
 /**
  * @author Mirash
  */
+
 interface ICredentials : Filterable {
     val title: String?
     val link: String?

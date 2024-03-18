@@ -36,9 +36,14 @@ abstract class PinCodeBaseActivity : AppCompatActivity() {
         binding.pinIndicator.setCheckedSize(size)
     }
 
-    protected fun startNewActivity(activityClass: Class<*>?) {
+    protected fun startNewFinishCurrentActivity(
+        activityClass: Class<*>?,
+        editIntent: ((intent: Intent) -> Unit)? = null
+    ) {
         finish()
-        startActivity(Intent(this, activityClass))
+        val intent = Intent(this, activityClass)
+        editIntent?.invoke(intent)
+        startActivity(intent)
     }
 }
 

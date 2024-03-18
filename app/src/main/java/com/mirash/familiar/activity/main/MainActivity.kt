@@ -39,9 +39,9 @@ import com.mirash.familiar.model.credentials.CredentialsItem
 import com.mirash.familiar.model.credentials.ICredentials
 import com.mirash.familiar.model.user.IUser
 import com.mirash.familiar.model.user.UserItem
+import com.mirash.familiar.motion.CredentialsItemTouchHelperCallback
 import com.mirash.familiar.motion.ItemTouchStateCallback
 import com.mirash.familiar.motion.OnStartDragListener
-import com.mirash.familiar.motion.SimpleItemTouchHelperCallback
 import com.mirash.familiar.tool.APP_BAR_USERS_MAX_VISIBLE_COUNT
 import com.mirash.familiar.tool.BACKGROUND_INACTIVITY_KILL_TIME
 import com.mirash.familiar.tool.EditResultAction
@@ -50,9 +50,11 @@ import com.mirash.familiar.tool.KEY_ID
 import com.mirash.familiar.tool.KEY_POSITION
 import com.mirash.familiar.tool.decoration.DividerListItemDecoration
 import com.mirash.familiar.tool.decoration.VerticalBottomSpaceItemDecoration
+import com.mirash.familiar.tool.fromCredentials
 import com.mirash.familiar.tool.listener.AppShowObserver
 import com.mirash.familiar.tool.listener.IScrollProvider
 import com.mirash.familiar.tool.openLinkExternally
+import com.mirash.familiar.tool.share
 import com.mirash.familiar.user.TAG_USER
 import com.mirash.familiar.user.UserControl
 import java.util.Locale
@@ -65,7 +67,7 @@ import kotlin.math.roundToInt
  * @author Mirash
  */
 class MainActivity : AppCompatActivity(), MainModelCallback, CredentialsItemCallback, OnStartDragListener,
-    ItemTouchStateCallback, Runnable, AppShowObserver {
+    Runnable, AppShowObserver {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var model: MainActivityModel
@@ -110,6 +112,7 @@ class MainActivity : AppCompatActivity(), MainModelCallback, CredentialsItemCall
             credentialsAdapter?.let {
                 it.setItems(credentialsItems)
                 if (it.isScrollToBottom) {
+                    it.isScrollToBottom = false
                     binding.credentialsRecycler.scrollToPosition(it.itemCount - 1)
                 }
             } ?: run {
@@ -117,8 +120,15 @@ class MainActivity : AppCompatActivity(), MainModelCallback, CredentialsItemCall
                     credentialsItems, this@MainActivity
                 )
                 binding.credentialsRecycler.adapter = adapter
-                val callback = SimpleItemTouchHelperCallback(adapter)
-                callback.touchStateCallback = this@MainActivity
+                val callback = CredentialsItemTouchHelperCallback(adapter)
+                callback.touchStateCallback = object : ItemTouchStateCallback {
+                    override fun onItemSelectStateChanged(selected: Boolean) {
+                    }
+
+                    override fun onItemClear() {
+                        credentialsAdapter?.items?.let { model.handleOrderChanged(it) }
+                    }
+                }
                 val helper = ItemTouchHelper(callback)
                 helper.attachToRecyclerView(binding.credentialsRecycler)
                 itemTouchHelper = helper
@@ -138,10 +148,11 @@ class MainActivity : AppCompatActivity(), MainModelCallback, CredentialsItemCall
     }
 
     private fun updateAppBarHeight(count: Int) {
+        val appBarHeight = binding.toolbar.height
         val height: Int =
             (min(APP_BAR_USERS_MAX_VISIBLE_COUNT, count) * resources.getDimension(R.dimen.user_item_height) +
                     resources.getDimension(R.dimen.half_padding) +
-                    binding.toolbar.height).roundToInt()
+                    appBarHeight).roundToInt()
         binding.appBar.layoutParams.let {
             if (it.height != height) {
                 it.height = height
@@ -164,10 +175,13 @@ class MainActivity : AppCompatActivity(), MainModelCallback, CredentialsItemCall
             for (user in users) {
                 items.add(UserItem(user))
             }
-            updateAppBarHeight(items.size)
+            binding.toolbar.post {
+                updateAppBarHeight(items.size)
+            }
             userAdapter?.let {
                 it.items = items
                 if (it.isScrollToBottom) {
+                    it.isScrollToBottom = false
                     binding.userRecycler.scrollToPosition(it.itemCount - 1)
                 }
             } ?: run {
@@ -289,6 +303,10 @@ class MainActivity : AppCompatActivity(), MainModelCallback, CredentialsItemCall
     }
 
     override fun onOrderChanged(items: List<ICredentials>) {}
+    override fun onSwiped(item: ICredentials) {
+        val string = fromCredentials(item)
+        share(this, string)
+    }
 
     private fun showEditCredentialsScreen(item: ICredentials?) {
         val intent = Intent(this, CredentialsEditActivity::class.java)
@@ -311,15 +329,8 @@ class MainActivity : AppCompatActivity(), MainModelCallback, CredentialsItemCall
         userActivityLauncher.launch(intent)
     }
 
-    //not used
     override fun onDragStart(viewHolder: RecyclerView.ViewHolder) {
         itemTouchHelper?.startDrag(viewHolder)
-    }
-
-    override fun onItemSelected() {}
-
-    override fun onItemClear() {
-        credentialsAdapter?.items?.let { model.handleOrderChanged(it) }
     }
 
     override fun run() {

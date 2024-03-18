@@ -12,6 +12,11 @@
         <item name="android:layout_width">match_parent</item>
     </style>
 
+    <style name="TextInputLayoutPassword" parent="TextInputLayout">
+        <item name="passwordToggleEnabled">true</item>
+        <item name="passwordToggleTint">@color/color_primary</item>
+    </style>
+
     <style name="NameInputText">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>

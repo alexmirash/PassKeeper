@@ -11,8 +11,14 @@ import com.mirash.familiar.motion.ItemTouchStateCallback
  */
 class CredentialsItemHolder(val binding: CredentialsItemViewBinding) : RecyclerView.ViewHolder(binding.root),
     ItemTouchStateCallback {
-    override fun onItemSelected() {
-        itemView.setBackgroundColor(ContextCompat.getColor(itemView.context, R.color.item_drag))
+
+    override fun onItemSelectStateChanged(selected: Boolean) {
+        itemView.setBackgroundColor(
+            if (selected) ContextCompat.getColor(
+                itemView.context,
+                R.color.item_drag
+            ) else 0
+        )
     }
 
     override fun onItemClear() {

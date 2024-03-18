@@ -29,7 +29,7 @@ class PinCodeEnterActivity : PinCodeBaseActivity() {
         binding.pinButtonBottomEnd.visibility = View.GONE
         binding.pinButtonBottomStart.text = getString(R.string.pin_code_change)
         binding.pinButtonBottomStart.setOnClickListener { _: View ->
-            startNewActivity(PinCodeEnterCurrentActivity::class.java)
+            startNewFinishCurrentActivity(PinCodeEnterCurrentActivity::class.java)
         }
         checkBio()
     }
@@ -41,7 +41,7 @@ class PinCodeEnterActivity : PinCodeBaseActivity() {
         val actualPinCode = EncryptedAppPreferences.pinCode
         if (actualPinCode == pinCode) {
             AppPreferences.removeInvalidInputsCount()
-            startNewActivity(MainActivity::class.java)
+            startNewFinishCurrentActivity(MainActivity::class.java)
         } else {
             getSystemVibrator(this)?.vibrate(
                 VibrationEffect.createOneShot(
@@ -73,6 +73,7 @@ class PinCodeEnterActivity : PinCodeBaseActivity() {
             BiometricManager.BIOMETRIC_SUCCESS -> {
                 Log.d(TAG_PIN, "App can authenticate using biometrics.")
                 binding.pinInput.initBiometricButton { _ -> showBiometricPrompt() }
+                showBiometricPrompt()
             }
 
             BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE -> Log.e(
@@ -91,18 +92,15 @@ class PinCodeEnterActivity : PinCodeBaseActivity() {
         val biometricPrompt = BiometricPrompt(this,
             ContextCompat.getMainExecutor(this),
             object : BiometricPrompt.AuthenticationCallback() {
-                override fun onAuthenticationError(
-                    errorCode: Int, errString: CharSequence
-                ) {
+                override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
                     super.onAuthenticationError(errorCode, errString)
                     showToast(String.format(getString(R.string.auth_error), errString), Toast.LENGTH_SHORT)
                 }
 
-                override fun onAuthenticationSucceeded(
-                    result: BiometricPrompt.AuthenticationResult
-                ) {
+                override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
                     super.onAuthenticationSucceeded(result)
-                    startNewActivity(MainActivity::class.java)
+                    AppPreferences.removeInvalidInputsCount()
+                    startNewFinishCurrentActivity(MainActivity::class.java)
                 }
 
                 override fun onAuthenticationFailed() {

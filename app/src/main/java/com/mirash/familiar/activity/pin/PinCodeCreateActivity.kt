@@ -1,13 +1,11 @@
 package com.mirash.familiar.activity.pin
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.activity.OnBackPressedCallback
 import com.mirash.familiar.R
-import com.mirash.familiar.preferences.EncryptedAppPreferences
 import com.mirash.familiar.tool.KEY_PIN_CODE
 import com.mirash.familiar.tool.PIN_CODE_SIZE
-import com.mirash.familiar.tool.isPinCodeActual
 
 /**
  * @author Mirash
@@ -18,6 +16,11 @@ class PinCodeCreateActivity : PinCodeBaseActivity() {
         binding.pinButtonBottomStart.visibility = View.GONE
         binding.pinButtonBottomEnd.visibility = View.VISIBLE
         binding.pinButtonBottomEnd.text = getString(R.string.done)
+        onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                startNewFinishCurrentActivity(PinCodeEnterActivity::class.java)
+            }
+        })
     }
 
     override fun getMessageRes(): Int = R.string.pin_code_create
@@ -34,18 +37,9 @@ class PinCodeCreateActivity : PinCodeBaseActivity() {
 
     override fun checkPinCode(pinCode: String?) {
         binding.pinButtonBottomEnd.setOnClickListener { _: View ->
-            finish()
-            val intent = Intent(this, PinCodeConfirmActivity::class.java)
-            intent.putExtra(KEY_PIN_CODE, pinCode)
-            startActivity(intent)
-        }
-    }
-
-    override fun onBackPressed() {
-        if (isPinCodeActual(EncryptedAppPreferences.pinCode)) {
-            startNewActivity(PinCodeEnterActivity::class.java)
-        } else {
-            super.onBackPressed()   //TODO check
+            startNewFinishCurrentActivity(PinCodeConfirmActivity::class.java) {
+                it.putExtra(KEY_PIN_CODE, pinCode)
+            }
         }
     }
 }

@@ -1,6 +1,7 @@
 package com.mirash.familiar.activity.main.credentials
 
 import android.annotation.SuppressLint
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -116,12 +117,13 @@ class CredentialsAdapter(
         }
     }
 
-    override fun onItemDismiss(position: Int) {
-        items.removeAt(position)
-        notifyItemRemoved(position)
+    override fun onSwiped(position: Int) {
+        Log.d("LOL", "onSwiped: $position ")
+        notifyItemChanged(position)
+        callback.onSwiped(items[position])
     }
 
-    override fun onItemMove(fromPosition: Int, toPosition: Int): Boolean {
+    override fun onMoved(fromPosition: Int, toPosition: Int): Boolean {
         Collections.swap(items, fromPosition, toPosition)
         notifyItemMoved(fromPosition, toPosition)
         callback.onOrderChanged(items)

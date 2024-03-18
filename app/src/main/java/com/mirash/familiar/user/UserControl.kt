@@ -2,11 +2,9 @@ package com.mirash.familiar.user
 
 import android.util.Log
 import com.mirash.familiar.db.Credentials
-import com.mirash.familiar.db.RepositoryProvider
 import com.mirash.familiar.db.RepositoryProvider.userRepository
 import com.mirash.familiar.db.TAG_DB
 import com.mirash.familiar.db.User
-import com.mirash.familiar.db.logUserCredentialsSync
 import com.mirash.familiar.eventmanager.EventManager
 import com.mirash.familiar.eventmanager.event.DataEvent
 import com.mirash.familiar.preferences.AppPreferences
@@ -39,15 +37,6 @@ object UserControl {
         }
     }
 
-    fun setRandomUser() {
-        runBlocking {
-            launch(Dispatchers.Default) {
-                val users = userRepository.getAllSync()
-                setUser(users[Random.nextInt(users.size)].id)
-            }
-        }
-    }
-
     private fun applyUserId(id: Long) {
         Log.d(TAG_USER, "applyUserId: $id")
         userId = id
@@ -65,26 +54,12 @@ object UserControl {
                     if (users.isEmpty()) {
                         Log.d(TAG_USER, "users do not exist! create default user")
                         applyUserId(createUser())
-                        for (index in 1..10) {
-                            createUser("User_$index")
-                        }
-                        logUserCredentialsSync()
                     } else {
                         Log.d(TAG_USER, "usersSize = ${users.size}, apply 0")
                         applyUserId(users[0].id)
                     }
                 } else {
                     Log.d(TAG_USER, "user init good")
-//                    val users = userRepository.getAllSync()
-//                    for (value in users) {
-//                        if (value.id != userId) {
-//                            userRepository.getByIdSync(value.id)?.let {
-//                                userRepository.delete(it)
-//                                logUserCreds()
-//                            }
-//                            break
-//                        }
-//                    }
                 }
             }
         }
@@ -92,17 +67,11 @@ object UserControl {
 
     private fun createUser(name: String = "User"): Long {
         val userId = userRepository.insert(User(name))
-        Log.d(TAG_DB, "userId = $userId")
-        RepositoryProvider.credentialsRepository.insertAll(getTestPredefinedCredentials(userId, name).also {
-            Log.d(
-                TAG_DB,
-                "insert creds ${it.size}"
-            )
-        })
+        Log.d(TAG_DB, "createUser: $userId")
         return userId
     }
 
-    fun getTestPredefinedCredentials(userId: Long, name: String): List<Credentials> {
+    private fun getTestPredefinedCredentials(userId: Long, name: String): List<Credentials> {
         val list = ArrayList<Credentials>()
         val count = Random.nextInt(2, 50)
         for (i in 0 until count) {
