@@ -2,9 +2,13 @@ package com.mirash.familiar.activity.main
 
 import android.app.SearchManager
 import android.content.Intent
+import android.graphics.Typeface
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.TypefaceSpan
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -16,6 +20,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.ViewCompat
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
@@ -81,6 +86,7 @@ class MainActivity : AppCompatActivity(), MainModelCallback, CredentialsItemCall
     private lateinit var userMenuItem: MenuItem
     private var userAddMenuItem: MenuItem? = null
     private var searchMenuItem: MenuItem? = null
+
     private val userActivityLauncher: ActivityResultLauncher<Intent> = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result: ActivityResult ->
@@ -100,6 +106,16 @@ class MainActivity : AppCompatActivity(), MainModelCallback, CredentialsItemCall
         Log.d(TAG_USER, "onUserChanged: ${value.id} ${value.name}")
         userAdapter?.setCheckedItem(value.id)
         binding.userTitle.text = value.name
+        binding.toolbarLayout.title = generateTitle(value.name)
+    }
+
+    private fun generateTitle(userName: String): CharSequence {
+        val appName = getString(R.string.app_name)
+        val typefaceSpan =
+            TypefaceSpan(Typeface.create(ResourcesCompat.getFont(this, R.font.magic_legends), Typeface.NORMAL))
+        return SpannableString("$appName $userName").apply {
+            setSpan(typefaceSpan, /*appName.length + 1*/0, length - 1, Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
+        }
     }
 
     private val credentialsObserver: Observer<List<Credentials>> = object : Observer<List<Credentials>> {

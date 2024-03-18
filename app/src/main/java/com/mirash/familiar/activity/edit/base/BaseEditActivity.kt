@@ -30,7 +30,9 @@ abstract class BaseEditActivity<I, E : I, M : BaseEditViewModel<I, E>, B : ViewB
         super.onCreate(savedInstanceState)
         binding = initViewBinding()
         setContentView(binding.root)
-        setSupportActionBar(toolbar())
+        setSupportActionBar(toolbar().apply {
+            setTitleTextAppearance(this@BaseEditActivity, R.style.ToolbarTitleTextAppearance)
+        })
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         model = initViewModel()
         intent.extras.let {
