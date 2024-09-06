@@ -1,8 +1,11 @@
 package com.mirash.familiar.model.credentials
 
+import kotlinx.serialization.Serializable
+
 /**
  * @author Mirash
  */
+@Serializable
 class CredentialsItem(private val credentials: ICredentials) : ICredentials {
     var isPasswordVisible = false
 

@@ -1,12 +1,13 @@
 package com.mirash.familiar.model.credentials
 
 import com.mirash.familiar.tool.listener.Filterable
+import kotlinx.serialization.Serializable
 
 /**
  * @author Mirash
  */
-
-interface ICredentials : Filterable {
+@Serializable
+sealed interface ICredentials : Filterable {
     val title: String?
     val link: String?
     val login: String?

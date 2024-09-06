@@ -1,10 +1,12 @@
 package com.mirash.familiar.model.credentials
 
 import com.mirash.familiar.tool.isAlike
+import kotlinx.serialization.Serializable
 
 /**
  * @author Mirash
  */
+@Serializable
 open class CredentialsModel : ICredentials {
     override var title: String? = null
     override var link: String? = null

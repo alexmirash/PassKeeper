@@ -62,6 +62,8 @@ import com.mirash.familiar.tool.openLinkExternally
 import com.mirash.familiar.tool.share
 import com.mirash.familiar.user.TAG_USER
 import com.mirash.familiar.user.UserControl
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import java.util.Locale
 import kotlin.math.abs
 import kotlin.math.min
@@ -321,6 +323,8 @@ class MainActivity : AppCompatActivity(), MainModelCallback, CredentialsItemCall
     override fun onOrderChanged(items: List<ICredentials>) {}
     override fun onSwiped(item: ICredentials) {
         val string = fromCredentials(item)
+        val jsonString = Json.encodeToString(item)
+        Log.d("LOL", jsonString)
         share(this, string)
     }
 
